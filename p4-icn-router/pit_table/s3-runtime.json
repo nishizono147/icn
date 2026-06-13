@@ -1,0 +1,20 @@
+{
+    "target": "bmv2",
+    "p4info": "build/switch.p4.p4info.txtpb",
+    "bmv2_json": "build/switch.json",
+    "table_entries": [
+      {
+        "table": "MyIngress.foward_interest",
+        "match": {
+          "hdr.ethernet.srcAddr": [
+            "08:00:00:00:02:00"
+          ]
+        },
+        "action_name": "MyIngress.dup_interest",
+        "action_params": {
+          "dstAddr": "08:00:00:00:02:22",
+          "port": 1
+        }
+      }
+    ]
+  }
