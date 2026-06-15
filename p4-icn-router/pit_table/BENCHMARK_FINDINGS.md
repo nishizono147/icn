@@ -49,9 +49,10 @@ reported by user (spikes appear throughout warm phase, not only trial 6).
 - After several trials, CLI shows cache on s1/s2/s3 simultaneously due to
   repeated Data flows with `flag=1`.
 
-## Recommendations
+## Fix applied (benchmark_icn.py)
 
-1. Measure with **pcap/tcpdump timestamps** on h1, not Scapy sniff callbacks.
-2. Keep one long-running capture process (avoid per-trial sniffer start/stop).
-3. For fair ICN evaluation, optionally fix `switch.p4` to cache on all switches
-   on Data return and retain edge cache only at s1.
+Measurement now uses a **single tcpdump process** for all trials and computes
+latency from **pcap packet timestamps** (Interest 0x88b5 -> Data 0x88b6 on the
+same capture), not Scapy AsyncSniffer callbacks.
+
+Warm-phase jitter dropped from ~7-80 ms (Scapy) to ~1-5 ms (pcap) in verification runs.

@@ -1,28 +1,25 @@
 #!/usr/bin/env python3
-"""Measure ICN content retrieval time (Interest send -> Data receive).
+"""Measure IP/UDP content retrieval time on h1 (fair comparison with pit_table ICN).
 
-Uses a single tcpdump capture and pcap packet timestamps (kernel/libpcap time)
-instead of Scapy AsyncSniffer callbacks, avoiding userspace delivery jitter.
-
-Pattern A: run multiple consecutive trials in the same Mininet session to
-observe cache warm-up (trial 1 = cold, later trials = warm).
+One tcpdump capture; latency = pcap timestamp(UDP request) -> pcap timestamp(UDP response).
+Same topology, images, payload size (256B), and trial pattern as benchmark_icn.py.
 """
 import argparse
 import os
 import signal
 import statistics
+import struct
 import subprocess
 import sys
 import time
 
-from icn_header import icn
-from payload_header import payload
-from scapy.all import Ether, get_if_hwaddr, get_if_list, rdpcap, sendp
+from scapy.all import Ether, IP, UDP, get_if_hwaddr, get_if_list, rdpcap, sendp
 from scapy.utils import PcapReader
+from udp_content import CLIENT_PORT, REQUEST_LEN, REQUEST_PORT, udp_request
 
-GATEWAY_MAC = "08:00:00:00:01:00"
-INTEREST_ETHER_TYPE = 0x88B5
-DATA_ETHER_TYPE = 0x88B6
+H1_IP = "10.0.1.1"
+H2_IP = "10.0.2.2"
+H1_GATEWAY_MAC = "08:00:00:00:01:00"
 
 
 def get_if():
@@ -33,15 +30,16 @@ def get_if():
     sys.exit(1)
 
 
-def build_interest(content_id, src_mac):
+def build_request(content_id, src_mac):
     return (
-        Ether(src=src_mac, dst=GATEWAY_MAC, type=INTEREST_ETHER_TYPE)
-        / icn(content_id=content_id, type=0x11, hop_count=4, flag=1)
+        Ether(src=src_mac, dst=H1_GATEWAY_MAC)
+        / IP(src=H1_IP, dst=H2_IP)
+        / UDP(sport=CLIENT_PORT, dport=REQUEST_PORT)
+        / udp_request(content_id=content_id, flag=1, hop_count=4)
     )
 
 
 def read_packets(pcap_path):
-    """Read all packets from a pcap file; tolerate in-progress writes."""
     if not os.path.exists(pcap_path) or os.path.getsize(pcap_path) < 24:
         return []
     try:
@@ -57,6 +55,33 @@ def read_packets(pcap_path):
         return packets
 
 
+def parse_request_content_id(pkt):
+    if IP not in pkt or UDP not in pkt:
+        return None
+    if pkt[IP].src != H1_IP or pkt[IP].dst != H2_IP:
+        return None
+    if pkt[UDP].dport != REQUEST_PORT:
+        return None
+    payload = bytes(pkt[UDP].payload)
+    if len(payload) < REQUEST_LEN:
+        return None
+    content_id = struct.unpack("!I", payload[:4])[0]
+    return content_id
+
+
+def parse_response_content_id(pkt):
+    if IP not in pkt or UDP not in pkt:
+        return None
+    if pkt[IP].src != H2_IP or pkt[IP].dst != H1_IP:
+        return None
+    if pkt[UDP].sport != REQUEST_PORT:
+        return None
+    payload = bytes(pkt[UDP].payload)
+    if len(payload) < 4:
+        return None
+    return struct.unpack("!I", payload[:4])[0]
+
+
 def start_tcpdump(iface, pcap_path):
     if os.path.exists(pcap_path):
         os.remove(pcap_path)
@@ -67,15 +92,15 @@ def start_tcpdump(iface, pcap_path):
             "-w", pcap_path,
             "-U",
             "-n",
-            "ether", "proto", f"0x{INTEREST_ETHER_TYPE:04x}",
-            "or", "ether", "proto", f"0x{DATA_ETHER_TYPE:04x}",
+            "host", H2_IP,
+            "and", "udp", "port", str(REQUEST_PORT),
         ],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
     time.sleep(0.3)
     if proc.poll() is not None:
-        print("Failed to start tcpdump (is it installed?)", file=sys.stderr)
+        print("Failed to start tcpdump", file=sys.stderr)
         sys.exit(1)
     return proc
 
@@ -90,10 +115,9 @@ def stop_tcpdump(proc):
             proc.wait(timeout=2)
 
 
-def wait_for_data(pcap_path, content_id, seen_count, timeout):
-    """Return (latency_ms, new_seen_count) using pcap Interest->Data timestamps."""
+def wait_for_response(pcap_path, content_id, seen_count, timeout):
     deadline = time.time() + timeout
-    t_interest = None
+    t_request = None
 
     while time.time() < deadline:
         packets = read_packets(pcap_path)
@@ -101,39 +125,40 @@ def wait_for_data(pcap_path, content_id, seen_count, timeout):
         while idx < len(packets):
             pkt = packets[idx]
             idx += 1
-            if icn in pkt and pkt[icn].content_id == content_id:
-                t_interest = float(pkt.time)
-            elif (
-                payload in pkt
-                and pkt[payload].content_id == content_id
-                and t_interest is not None
-            ):
-                latency_ms = max(0.0, (float(pkt.time) - t_interest) * 1000.0)
-                return latency_ms, idx
+            req_id = parse_request_content_id(pkt)
+            if req_id == content_id:
+                t_request = float(pkt.time)
+            elif t_request is not None:
+                resp_id = parse_response_content_id(pkt)
+                if resp_id == content_id:
+                    latency_ms = max(0.0, (float(pkt.time) - t_request) * 1000.0)
+                    return latency_ms, idx
         time.sleep(0.005)
 
     return None, seen_count
 
 
-def run_benchmark(content_id, trials, interval, timeout, warm_start, pcap_path):
-    iface = get_if()
-    src_mac = get_if_hwaddr(iface)
-    interest_pkt = build_interest(content_id, src_mac)
+def run_benchmark(content_id, trials, interval, timeout, warm_start, pcap_path, iface):
+    if content_id not in (1, 2, 3):
+        print(f"Unknown content_id: {content_id}", file=sys.stderr)
+        sys.exit(1)
 
+    request_pkt = build_request(content_id, get_if_hwaddr(iface))
     tcpdump_proc = start_tcpdump(iface, pcap_path)
     seen_count = 0
-
     results = []
+
     print(f"content_id={content_id}, trials={trials}, interval={interval}s")
+    print(f"protocol=UDP {H1_IP}:{CLIENT_PORT} -> {H2_IP}:{REQUEST_PORT}")
     print(f"capture={pcap_path} (tcpdump pcap timestamps)")
     print("trial,phase,latency_ms,status")
 
     try:
         for trial in range(1, trials + 1):
             phase = "cold" if trial == 1 else "warm"
-            sendp(interest_pkt, iface=iface, verbose=False)
+            sendp(request_pkt, iface=iface, verbose=False)
 
-            latency_ms, seen_count = wait_for_data(
+            latency_ms, seen_count = wait_for_response(
                 pcap_path, content_id, seen_count, timeout
             )
 
@@ -155,21 +180,26 @@ def run_benchmark(content_id, trials, interval, timeout, warm_start, pcap_path):
         sys.exit(1)
 
     cold = [results[0]] if results[0] is not None else []
+    all_trials = ok
     warm = [r for i, r in enumerate(results, start=1) if r is not None and i >= warm_start]
 
     print("\n--- summary ---")
     if cold:
         print(f"cold (trial 1): {cold[0]:.3f} ms")
+    print(
+        f"all trials avg: avg={statistics.mean(all_trials):.3f} ms, "
+        f"min={min(all_trials):.3f} ms, max={max(all_trials):.3f} ms, n={len(all_trials)}"
+    )
     if warm:
         print(
             f"warm (trial {warm_start}-{trials}): "
             f"avg={statistics.mean(warm):.3f} ms, "
-            f"min={min(warm):.3f} ms, "
-            f"max={max(warm):.3f} ms, "
-            f"n={len(warm)}"
+            f"min={min(warm):.3f} ms, max={max(warm):.3f} ms, n={len(warm)}"
         )
-    if cold and warm:
-        print(f"speedup (cold / warm avg): {cold[0] / statistics.mean(warm):.2f}x")
+    print(
+        "note: compare cold (trial 1) with ICN cold; IP has no in-network cache "
+        "(warm trials still reach h2)."
+    )
 
     failed = trials - len(ok)
     if failed:
@@ -179,36 +209,19 @@ def run_benchmark(content_id, trials, interval, timeout, warm_start, pcap_path):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Measure ICN content retrieval latency on the consumer (h1)."
+        description="Measure UDP content retrieval latency on h1 (IP baseline)."
     )
-    parser.add_argument("content_id", type=int, help="Content ID to request")
-    parser.add_argument(
-        "-n", "--trials", type=int, default=10, help="Number of consecutive trials (default: 10)"
-    )
-    parser.add_argument(
-        "-i", "--interval", type=float, default=0.2,
-        help="Seconds between trials (default: 0.2)"
-    )
-    parser.add_argument(
-        "-t", "--timeout", type=float, default=5.0,
-        help="Seconds to wait for Data per trial (default: 5.0)"
-    )
-    parser.add_argument(
-        "--warm-start", type=int, default=4,
-        help="First trial index counted as warm in summary (default: 4)"
-    )
-    parser.add_argument(
-        "--pcap", default="/tmp/benchmark_icn.pcap",
-        help="Path for tcpdump capture file (default: /tmp/benchmark_icn.pcap)"
-    )
+    parser.add_argument("content_id", type=int, help="Content ID (1-3)")
+    parser.add_argument("-n", "--trials", type=int, default=10)
+    parser.add_argument("-i", "--interval", type=float, default=0.2)
+    parser.add_argument("-t", "--timeout", type=float, default=5.0)
+    parser.add_argument("--warm-start", type=int, default=4)
+    parser.add_argument("--pcap", default="/tmp/benchmark_ip.pcap")
+    parser.add_argument("--iface", default="eth0")
     args = parser.parse_args()
 
     if args.trials < 1:
         parser.error("trials must be >= 1")
-    if args.warm_start < 2:
-        parser.error("warm-start must be >= 2")
-    if args.warm_start > args.trials:
-        parser.error("warm-start must be <= trials")
 
     run_benchmark(
         content_id=args.content_id,
@@ -217,6 +230,7 @@ def main():
         timeout=args.timeout,
         warm_start=args.warm_start,
         pcap_path=args.pcap,
+        iface=args.iface,
     )
 
 
