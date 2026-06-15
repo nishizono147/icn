@@ -28,6 +28,7 @@ header ICNHeader {
 header payload_t {
     bit<32> content_id;
     bit<8> flag;
+    bit<8> ttl;
     bit<2048> data;
 }
 
@@ -98,6 +99,7 @@ control MyIngress(inout headers hdr,
         pit_table.write(hdr.payload.content_id, 0);
         hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF;
         hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF;
+        hdr.payload.ttl = hdr.payload.ttl - 1;
     }
 
     action cache_content() {
@@ -111,6 +113,7 @@ control MyIngress(inout headers hdr,
         hdr.payload.setValid();  //ペイロードを有効化
         hdr.payload.data = cached_data; //書き込み
         hdr.payload.content_id = hdr.icn.content_id;
+        hdr.payload.ttl = 8;
         hdr.payload.flag = 1;
         hdr.ethernet.etherType = 0x88B6;
         hdr.icn.setInvalid();

@@ -4,6 +4,7 @@ import random
 import socket
 import os
 import sys
+import time
 
 from icn_header import icn
 from payload_header import payload
@@ -40,10 +41,14 @@ def read_image(file_path):
         print(f"File not found: {file_path}")
         return None
 
-def handle_pkt(packet):
+def handle_pkt(packet, quiet=False):
     if icn in packet:
-        print("got a packet")
-        packet.show2()
+        if os.environ.get("BENCH_LOG"):
+            with open("/tmp/h2_interests.log", "a") as f:
+                f.write(f"{time.time()}\t{packet[icn].content_id}\n")
+        if not quiet:
+            print("got a packet")
+            packet.show2()
         content_id = packet[icn].content_id
         image_path = CONTENT_IMAGE_MAP.get(content_id)
         if not image_path:
@@ -57,9 +62,10 @@ def handle_pkt(packet):
         
         iface = get_if()
         pkt = Ether(src=get_if_hwaddr(iface), dst=packet[Ether].src, type=0x88B6)
-        pkt = pkt / payload(content_id=packet[icn].content_id, flag=1, data=image_data)
+        pkt = pkt / payload(content_id=packet[icn].content_id, flag=1, ttl=8, data=image_data)
 
-        pkt.show2()
+        if not quiet:
+            pkt.show2()
         sendp(pkt, iface=iface, verbose=False)
 
 #        hexdump(pkt)
@@ -67,12 +73,21 @@ def handle_pkt(packet):
         sys.stdout.flush()
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="Respond to ICN Interest packets with content Data (producer, h2)."
+    )
+    parser.add_argument(
+        "-q", "--quiet", action="store_true",
+        help="Suppress per-packet debug output (useful during benchmarking)"
+    )
+    args = parser.parse_args()
+
     ifaces = [i for i in os.listdir('/sys/class/net/') if 'eth' in i]
     iface = ifaces[0]
-    print("sniffing on %s" % iface)
+    if not args.quiet:
+        print("sniffing on %s" % iface)
     sys.stdout.flush()
-    sniff(iface = iface,
-          prn = lambda x: handle_pkt(x))
+    sniff(iface=iface, prn=lambda x: handle_pkt(x, quiet=args.quiet))
 
 
 if __name__ == '__main__':
