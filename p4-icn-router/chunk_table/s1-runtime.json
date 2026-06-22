@@ -16,18 +16,16 @@
           "port": 2
         }
       }
-    ], 
-
+    ],
     "clone_session_entries": [
-    {
-      "clone_session_id": 100,
-      "replicas": [
-        {
-          "egress_port": 511,
-          "instance": 1
-        }
-      ]
-    }
-  ]
-
+      {
+        "clone_session_id": 100,
+        "replicas": [
+          {
+            "egress_port": 1,
+            "instance": 1
+          }
+        ]
+      }
+    ]
   }
