@@ -123,19 +123,40 @@ def main():
         check("received image matches original (phase 1)", recv_md5 == original_md5,
               f"got={recv_md5}")
 
-    print("\n  Switch cache after phase 1:")
+    print("\n  Switch cache after phase 1 (gradual placement: producer-side s3 only):")
     for sw in ("s1", "s2", "s3"):
         cached_chunks = sum(1 for i in range(expected_chunks) if chunk_cached(net, sw, CONTENT_ID, i))
         total_reg = total_chunks_cached(net, sw, CONTENT_ID)
         print(f"    {sw}: {cached_chunks}/{expected_chunks} chunks cached, total_chunks_reg={total_reg}")
-        check(f"{sw} cached all {expected_chunks} chunks", cached_chunks == expected_chunks,
-              f"{cached_chunks}/{expected_chunks}")
-        check(f"{sw} total_chunks_reg == {expected_chunks}", total_reg == expected_chunks,
-              f"reg={total_reg}")
 
-    # --- Phase 2: warm cache (should be served from s1, not h2) ---
-    print("\n=== Phase 2: warm cache (Interest hit at s1, multi-chunk from cache) ===")
+    s3_cached = sum(1 for i in range(expected_chunks) if chunk_cached(net, "s3", CONTENT_ID, i))
+    check(f"s3 cached all {expected_chunks} chunks after cold fetch", s3_cached == expected_chunks,
+          f"{s3_cached}/{expected_chunks}")
+    for sw in ("s1", "s2"):
+        cached = sum(1 for i in range(expected_chunks) if chunk_cached(net, sw, CONTENT_ID, i))
+        check(f"{sw} has no cache after cold fetch (flag=0 downstream)", cached == 0,
+              f"{cached}/{expected_chunks}")
+
+    # --- Phase 2: migrate cache toward consumer (pit_table-style) ---
+    print("\n=== Phase 2: migrate cache s3 -> s2 -> s1 ===")
     h2_interests_before = int(h2.cmd("grep -c 'got a packet' /tmp/h2_content.log 2>/dev/null || echo 0").strip())
+
+    h1.cmd("python3 send_interest.py 4")
+    time.sleep(3)
+    s2_cached = sum(1 for i in range(expected_chunks) if chunk_cached(net, "s2", CONTENT_ID, i))
+    s3_cached_after = sum(1 for i in range(expected_chunks) if chunk_cached(net, "s3", CONTENT_ID, i))
+    check("interest 2: s2 cached all chunks", s2_cached == expected_chunks, f"{s2_cached}/{expected_chunks}")
+    check("interest 2: s3 cache cleared after serve", s3_cached_after == 0, f"s3={s3_cached_after}")
+
+    h1.cmd("python3 send_interest.py 4")
+    time.sleep(3)
+    s1_cached = sum(1 for i in range(expected_chunks) if chunk_cached(net, "s1", CONTENT_ID, i))
+    s2_cached_after = sum(1 for i in range(expected_chunks) if chunk_cached(net, "s2", CONTENT_ID, i))
+    check("interest 3: s1 cached all chunks", s1_cached == expected_chunks, f"{s1_cached}/{expected_chunks}")
+    check("interest 3: s2 cache cleared after serve", s2_cached_after == 0, f"s2={s2_cached_after}")
+
+    # --- Phase 3: warm cache at s1 (no new Interest to h2) ---
+    print("\n=== Phase 3: warm cache (Interest hit at s1, multi-chunk from cache) ===")
 
     h1.cmd("pkill -f 'python3 receive.py' 2>/dev/null || true")
     time.sleep(0.5)
@@ -145,7 +166,7 @@ def main():
     h1.cmd("python3 send_interest.py 4")
 
     recon2 = wait_for_log(h1, "/tmp/h1_phase2.log", "Successfully reconstructed", timeout=20)
-    check("h1 received and reassembled all chunks (phase 2)", recon2 >= 1,
+    check("h1 received and reassembled all chunks (phase 3)", recon2 >= 1,
           f"reconstruct events={recon2}")
 
     h2_interests_after = int(h2.cmd("grep -c 'got a packet' /tmp/h2_content.log 2>/dev/null || echo 0").strip())
@@ -153,11 +174,11 @@ def main():
           f"before={h2_interests_before}, after={h2_interests_after}")
 
     recv2_md5 = h1.cmd(f"md5sum {received_path} 2>/dev/null | awk '{{print $1}}'").strip()
-    check("received image matches original (phase 2)", recv2_md5 == original_md5,
+    check("received image matches original (phase 3)", recv2_md5 == original_md5,
           f"got={recv2_md5}")
 
     chunk_log = h1.cmd("grep 'Got chunk' /tmp/h1_phase2.log 2>/dev/null | wc -l").strip()
-    check(f"h1 got {expected_chunks} chunk packets (phase 2)", chunk_log.isdigit() and int(chunk_log) == expected_chunks,
+    check(f"h1 got {expected_chunks} chunk packets (phase 3)", chunk_log.isdigit() and int(chunk_log) == expected_chunks,
           f"chunk_lines={chunk_log}")
 
     print("\n=== Summary ===")

@@ -46,6 +46,8 @@ struct metadata {
     bit<16> current_chunk;
     @field_list(FL_SERVE)
     bit<1>  serving_from_cache;
+    @field_list(FL_SERVE)
+    bit<1>  clear_cache_after_serve;
 }
 
 parser MyParser(packet_in pkt,
@@ -104,6 +106,22 @@ control MyIngress(inout headers hdr,
         bit<32> index = (bit<32>)hdr.payload.content_id * 10 + (bit<32>)hdr.payload.chunk_id;
         content_cache.write(index, hdr.payload.data);
         total_chunks_reg.write((bit<32>)hdr.payload.content_id, hdr.payload.total_chunks);
+        hdr.payload.flag = 0;
+    }
+
+    action clear_content_cache(bit<32> content_id) {
+        bit<32> base = content_id * 10;
+        content_cache.write(base + 0, 0);
+        content_cache.write(base + 1, 0);
+        content_cache.write(base + 2, 0);
+        content_cache.write(base + 3, 0);
+        content_cache.write(base + 4, 0);
+        content_cache.write(base + 5, 0);
+        content_cache.write(base + 6, 0);
+        content_cache.write(base + 7, 0);
+        content_cache.write(base + 8, 0);
+        content_cache.write(base + 9, 0);
+        total_chunks_reg.write(content_id, 0);
     }
 
     action serve_cached_chunk(bit<16> chunk_id, bit<32> content_id) {
@@ -128,7 +146,11 @@ control MyIngress(inout headers hdr,
         if (meta.current_chunk < meta.serve_total) {
             clone_preserving_field_list(CloneType.I2E, CLONE_SERVE_SESSION, FL_SERVE);
         } else {
+            if (meta.clear_cache_after_serve == 1) {
+                clear_content_cache(meta.serve_content_id);
+            }
             meta.serving_from_cache = 0;
+            meta.clear_cache_after_serve = 0;
         }
     }
 
@@ -142,6 +164,7 @@ control MyIngress(inout headers hdr,
         pit_table.write(hdr.icn.content_id, standard_metadata.ingress_port);
         meta.serving_from_cache = 1;
         meta.serve_content_id = hdr.icn.content_id;
+        meta.clear_cache_after_serve = (hdr.icn.flag != 1) ? 1w1 : 1w0;
         total_chunks_reg.read(meta.serve_total, (bit<32>)hdr.icn.content_id);
 
         if (meta.serve_total > 1) {
@@ -153,7 +176,11 @@ control MyIngress(inout headers hdr,
         data_forward();
 
         if (meta.serve_total <= 1) {
+            if (meta.clear_cache_after_serve == 1) {
+                clear_content_cache(meta.serve_content_id);
+            }
             meta.serving_from_cache = 0;
+            meta.clear_cache_after_serve = 0;
         }
     }
 
