@@ -163,13 +163,13 @@ def plot_graph(out_path, trials, icn_mean, icn_std, ip_mean, ip_std, sessions):
     x = list(range(1, trials + 1))
     fig, ax = plt.subplots(figsize=(8, 5))
 
-    ax.errorbar(
-        x, icn_mean, yerr=icn_std, marker="o", capsize=4, linewidth=2,
+    ax.plot(
+        x, icn_mean, marker="o", linewidth=2,
         label=f"ICN (pit_table, N={sessions} sessions)",
         color="#1f77b4",
     )
-    ax.errorbar(
-        x, ip_mean, yerr=ip_std, marker="s", capsize=4, linewidth=2,
+    ax.plot(
+        x, ip_mean, marker="s", linewidth=2,
         label=f"IP/UDP baseline (N={sessions} sessions)",
         color="#ff7f0e",
     )
