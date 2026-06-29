@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
+"""ICN chunked producer on h2: memory cache + prebuilt frames + AF_PACKET send.
+
+Avoids per-request Scapy sniff/sendp to reduce userspace producer overhead.
+"""
 import argparse
 import os
+import socket
+import struct
 import sys
 
-from icn_header import icn
+from scapy.all import Ether, raw
 from payload_header import payload
-from scapy.all import Ether, get_if_hwaddr, get_if_list, sendp, sniff
+
+INTEREST_TYPE = 0x88B5
+DATA_TYPE = 0x88B6
+H2_MAC = "08:00:00:00:02:22"
 
 CONTENT_IMAGE_MAP = {
     1: "image1.png",
@@ -16,7 +25,12 @@ CONTENT_IMAGE_MAP = {
 }
 
 CHUNK_SIZE = 256
-CONTENT_CHUNKS = {}
+# content_id -> list of prebuilt Ethernet frames (dst MAC patched on send)
+PREBUILT = {}
+
+
+def mac_bytes(mac):
+    return bytes(int(x, 16) for x in mac.split(":"))
 
 
 def load_content_chunks(path):
@@ -31,80 +45,77 @@ def load_content_chunks(path):
     return chunks
 
 
-def load_all_content():
-    cache = {}
-    for content_id, path in CONTENT_IMAGE_MAP.items():
-        try:
-            cache[content_id] = load_content_chunks(path)
-        except FileNotFoundError:
-            print(f"File not found: {path}", file=sys.stderr)
-    return cache
-
-
-def get_if():
-    for i in get_if_list():
-        if "eth0" in i:
-            return i
-    print("Cannot find eth0 interface")
-    exit(1)
-
-
-def handle_pkt(packet, quiet=False):
-    if icn not in packet:
-        return
-
-    content_id = packet[icn].content_id
-    chunks = CONTENT_CHUNKS.get(content_id)
-    if not chunks:
-        if not quiet:
-            print(f"No cached content for content_id: {content_id}")
-        return
-
-    if not quiet:
-        print("got a packet")
-        packet.show2()
-
-    iface = get_if()
-    total_chunks = len(chunks)
+def build_prebuilt(content_id, chunks, h2_mac):
+    total = len(chunks)
+    h2 = mac_bytes(h2_mac)
+    frames = []
     for chunk_id, chunk_data in enumerate(chunks):
-        pkt = Ether(src=get_if_hwaddr(iface), dst=packet[Ether].src, type=0x88B6)
-        pkt = pkt / payload(
+        pkt = Ether(src=h2, dst="00:00:00:00:00:00", type=DATA_TYPE) / payload(
             content_id=content_id,
-            total_chunks=total_chunks,
+            total_chunks=total,
             chunk_id=chunk_id,
             flag=1,
             source_switch=0,
             data=chunk_data,
         )
-        sendp(pkt, iface=iface, verbose=False)
+        frames.append(bytearray(raw(pkt)))
+    return frames
+
+
+def load_all_prebuilt(h2_mac):
+    cache = {}
+    for content_id, path in CONTENT_IMAGE_MAP.items():
+        try:
+            chunks = load_content_chunks(path)
+            cache[content_id] = build_prebuilt(content_id, chunks, h2_mac)
+        except FileNotFoundError:
+            print(f"File not found: {path}", file=sys.stderr)
+    return cache
+
+
+def serve(sock, quiet):
+    h2 = mac_bytes(H2_MAC)
+    while True:
+        frame = sock.recv(65535)
+        if len(frame) < 18:
+            continue
+        if struct.unpack("!H", frame[12:14])[0] != INTEREST_TYPE:
+            continue
+        content_id = struct.unpack("!I", frame[14:18])[0]
+        templates = PREBUILT.get(content_id)
+        if not templates:
+            continue
+        dst_mac = frame[6:12]
         if not quiet:
-            print(f"Sent chunk {chunk_id + 1}/{total_chunks}")
-    sys.stdout.flush()
+            print(f"Interest content_id={content_id}, dst={dst_mac.hex()}", flush=True)
+        for tmpl in templates:
+            out = tmpl[:]
+            out[0:6] = dst_mac
+            out[6:12] = h2
+            sock.send(out)
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Respond to ICN Interest packets with chunked Data (producer, h2)."
+        description="ICN chunked producer (h2): prebuilt frames + AF_PACKET."
     )
-    parser.add_argument(
-        "-q", "--quiet", action="store_true",
-        help="Suppress per-packet debug output",
-    )
+    parser.add_argument("-q", "--quiet", action="store_true")
     args = parser.parse_args()
 
-    global CONTENT_CHUNKS
+    global PREBUILT
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    CONTENT_CHUNKS = load_all_content()
-    if not CONTENT_CHUNKS:
-        print("No content loaded into cache", file=sys.stderr)
+    PREBUILT = load_all_prebuilt(H2_MAC)
+    if not PREBUILT:
+        print("No content loaded", file=sys.stderr)
         sys.exit(1)
 
-    ifaces = [i for i in os.listdir("/sys/class/net/") if "eth" in i]
-    iface = ifaces[0]
+    iface = "eth0"
+    sock = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.htons(INTEREST_TYPE))
+    sock.bind((iface, 0))
+
     if not args.quiet:
-        print("sniffing on %s" % iface)
-    sys.stdout.flush()
-    sniff(iface=iface, prn=lambda x: handle_pkt(x, quiet=args.quiet))
+        print(f"listening on {iface} (AF_PACKET, prebuilt cache)", flush=True)
+    serve(sock, args.quiet)
 
 
 if __name__ == "__main__":

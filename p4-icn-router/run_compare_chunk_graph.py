@@ -42,9 +42,12 @@ def parse_benchmark_output(text):
         if not line or line.startswith("trial,") or line.startswith("---"):
             continue
         parts = line.split(",")
-        if len(parts) < 4:
+        if len(parts) == 3:
+            trial_s, lat_s, status = parts[0], parts[1], parts[2]
+        elif len(parts) >= 4:
+            trial_s, lat_s, status = parts[0], parts[2], parts[3]
+        else:
             continue
-        trial_s, _phase, lat_s, status = parts[0], parts[1], parts[2], parts[3]
         if status != "ok" or not lat_s:
             continue
         rows.append((int(trial_s), float(lat_s)))
@@ -168,7 +171,7 @@ def plot_graph(out_path, trials, icn_mean, ip_mean, sessions):
     ax.set_xlabel("要求回数")
     ax.set_ylabel("コンテンツ取得時間 (ms)")
     ax.set_title(
-        f"chunk_table vs IP: image4 ({CHUNK_SIZE}B/chunk, last-chunk latency)"
+        f"chunk_table vs IP: image4.png ({CHUNK_SIZE}B/chunk, 10 requests)"
     )
     ax.set_xticks(x)
     ax.grid(True, alpha=0.3)
@@ -181,21 +184,25 @@ def plot_graph(out_path, trials, icn_mean, ip_mean, sessions):
 
 def print_summary(trials, icn_mean, icn_std, ip_mean, ip_std):
     print("\n=== Summary (mean +/- std, ms) ===")
-    print("trial,ICN_mean,ICN_std,IP_mean,IP_std")
+    print("trial,ICN_mean,ICN_std,IP_mean,IP_std,ICN_faster")
+    icn_all, ip_all = [], []
     for i in range(trials):
+        faster = ""
+        if icn_mean[i] == icn_mean[i] and ip_mean[i] == ip_mean[i]:
+            faster = "yes" if icn_mean[i] < ip_mean[i] else "no"
+            icn_all.append(icn_mean[i])
+            ip_all.append(ip_mean[i])
         print(
             f"{i+1},"
             f"{icn_mean[i]:.3f},{icn_std[i]:.3f},"
-            f"{ip_mean[i]:.3f},{ip_std[i]:.3f}"
+            f"{ip_mean[i]:.3f},{ip_std[i]:.3f},{faster}"
         )
-    if icn_mean[0] == icn_mean[0] and ip_mean[0] == ip_mean[0]:
-        print(f"\nCold (trial 1): ICN={icn_mean[0]:.2f} ms, IP={ip_mean[0]:.2f} ms")
-    warm_icn = [icn_mean[i] for i in range(3, trials) if icn_mean[i] == icn_mean[i]]
-    warm_ip = [ip_mean[i] for i in range(3, trials) if ip_mean[i] == ip_mean[i]]
-    if warm_icn:
-        print(f"ICN warm (trial 4-{trials}) avg: {statistics.mean(warm_icn):.2f} ms")
-    if warm_ip:
-        print(f"IP trial 4-{trials} avg: {statistics.mean(warm_ip):.2f} ms")
+    if icn_all and ip_all:
+        print(
+            f"\nOverall avg (trial 1-{trials}): "
+            f"ICN={statistics.mean(icn_all):.2f} ms, "
+            f"IP={statistics.mean(ip_all):.2f} ms"
+        )
 
 
 def main():

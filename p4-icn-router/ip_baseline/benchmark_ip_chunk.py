@@ -8,6 +8,7 @@ import argparse
 import os
 import signal
 import statistics
+import struct
 import subprocess
 import sys
 import time
@@ -66,7 +67,6 @@ def parse_request_content_id(pkt):
     payload = bytes(pkt[UDP].payload)
     if len(payload) < REQUEST_LEN:
         return None
-    import struct
     return struct.unpack("!I", payload[:4])[0]
 
 
@@ -122,7 +122,7 @@ def wait_for_last_chunk(pcap_path, content_id, seen_count, timeout):
     return None, seen_count
 
 
-def run_benchmark(content_id, trials, interval, timeout, warm_start, pcap_path, iface):
+def run_benchmark(content_id, trials, interval, timeout, pcap_path, iface):
     request_pkt = build_request(content_id, get_if_hwaddr(iface))
     tcpdump_proc = start_tcpdump(iface, pcap_path)
     seen_count = 0
@@ -132,20 +132,19 @@ def run_benchmark(content_id, trials, interval, timeout, warm_start, pcap_path, 
     print(f"chunk_size={CHUNK_SIZE}B, metric=request->last UDP chunk")
     print(f"protocol=UDP {H1_IP}:{CLIENT_PORT} -> {H2_IP}:{REQUEST_PORT}")
     print(f"capture={pcap_path} (tcpdump pcap timestamps)")
-    print("trial,phase,latency_ms,status")
+    print("trial,latency_ms,status")
 
     try:
         for trial in range(1, trials + 1):
-            phase = "cold" if trial == 1 else "warm"
             sendp(request_pkt, iface=iface, verbose=False)
             latency_ms, seen_count = wait_for_last_chunk(
                 pcap_path, content_id, seen_count, timeout
             )
             if latency_ms is None:
-                print(f"{trial},{phase},,timeout", flush=True)
+                print(f"{trial},,timeout", flush=True)
                 results.append(None)
             else:
-                print(f"{trial},{phase},{latency_ms:.3f},ok", flush=True)
+                print(f"{trial},{latency_ms:.3f},ok", flush=True)
                 results.append(latency_ms)
             if trial < trials:
                 time.sleep(interval)
@@ -157,17 +156,11 @@ def run_benchmark(content_id, trials, interval, timeout, warm_start, pcap_path, 
         print("\nNo successful trials.", file=sys.stderr)
         sys.exit(1)
 
-    cold = [results[0]] if results[0] is not None else []
-    warm = [r for i, r in enumerate(results, start=1) if r is not None and i >= warm_start]
-
     print("\n--- summary ---")
-    if cold:
-        print(f"cold (trial 1): {cold[0]:.3f} ms")
-    if warm:
-        print(
-            f"warm (trial {warm_start}-{trials}): "
-            f"avg={statistics.mean(warm):.3f} ms, n={len(warm)}"
-        )
+    print(
+        f"all trials: avg={statistics.mean(ok):.3f} ms, "
+        f"min={min(ok):.3f} ms, max={max(ok):.3f} ms, n={len(ok)}"
+    )
     failed = trials - len(ok)
     if failed:
         print(f"failed trials: {failed}", file=sys.stderr)
@@ -182,7 +175,6 @@ def main():
     parser.add_argument("-n", "--trials", type=int, default=10)
     parser.add_argument("-i", "--interval", type=float, default=0.2)
     parser.add_argument("-t", "--timeout", type=float, default=15.0)
-    parser.add_argument("--warm-start", type=int, default=4)
     parser.add_argument("--pcap", default="/tmp/benchmark_ip_chunk.pcap")
     parser.add_argument("--iface", default="eth0")
     args = parser.parse_args()
@@ -192,7 +184,6 @@ def main():
         trials=args.trials,
         interval=args.interval,
         timeout=args.timeout,
-        warm_start=args.warm_start,
         pcap_path=args.pcap,
         iface=args.iface,
     )
