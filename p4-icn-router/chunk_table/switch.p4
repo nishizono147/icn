@@ -20,7 +20,7 @@ header ICNHeader {
     bit<32> content_id;
     bit<16> type;
     bit<8> flag;
-    bit<8> hop_count;
+    bit<8> source_switch;  // 0 = producer / unknown; 1..3 = s1..s3
 }
 
 header payload_t {
@@ -28,6 +28,7 @@ header payload_t {
     bit<16> total_chunks;
     bit<16> chunk_id;
     bit<8> flag;
+    bit<8> source_switch;
     bit<2048> data;
 }
 
@@ -38,6 +39,8 @@ struct headers {
 }
 
 struct metadata {
+    @field_list(FL_SERVE)
+    bit<8> local_switch_id;
     @field_list(FL_SERVE)
     bit<32> serve_content_id;
     @field_list(FL_SERVE)
@@ -84,9 +87,27 @@ control MyIngress(inout headers hdr,
     register<bit<2048>>(10240) content_cache;
     register<bit<9>>(1024) pit_table;
     register<bit<16>>(1024) total_chunks_reg;
+    register<bit<8>>(1) switch_id_reg;
 
     action drop() {
         mark_to_drop(standard_metadata);
+    }
+
+    action set_local_switch_id(bit<8> switch_id) {
+        switch_id_reg.write(0, switch_id);
+        meta.local_switch_id = switch_id;
+    }
+
+    table switch_config {
+        key = {
+            hdr.ethernet.etherType: exact;
+        }
+        actions = {
+            set_local_switch_id;
+            NoAction;
+        }
+        default_action = NoAction();
+        size = 4;
     }
 
     action data_forward() {
@@ -127,8 +148,10 @@ control MyIngress(inout headers hdr,
     action serve_cached_chunk(bit<16> chunk_id, bit<32> content_id) {
         bit<32> index = (bit<32>)content_id * 10 + (bit<32>)chunk_id;
         bit<2048> cached_data;
+        bit<8> sw_id;
 
         content_cache.read(cached_data, index);
+        switch_id_reg.read(sw_id, 0);
 
         hdr.payload.setValid();
         hdr.payload.data = cached_data;
@@ -136,6 +159,7 @@ control MyIngress(inout headers hdr,
         hdr.payload.chunk_id = chunk_id;
         total_chunks_reg.read(hdr.payload.total_chunks, content_id);
         hdr.payload.flag = 1;
+        hdr.payload.source_switch = sw_id;
         hdr.ethernet.etherType = 0x88B6;
         hdr.icn.setInvalid();
 
@@ -188,7 +212,6 @@ control MyIngress(inout headers hdr,
         standard_metadata.egress_spec = port;
         hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
         hdr.ethernet.dstAddr = dstAddr;
-        hdr.icn.hop_count = hdr.icn.hop_count - 1;
     }
 
     table foward_interest {
@@ -204,6 +227,8 @@ control MyIngress(inout headers hdr,
     }
 
     apply {
+        switch_config.apply();
+
         if (hdr.icn.isValid()) {
             if (meta.serving_from_cache == 1 && meta.current_chunk > 0) {
                 continue_cache_serve();

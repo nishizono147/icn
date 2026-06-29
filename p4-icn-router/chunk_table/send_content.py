@@ -80,7 +80,8 @@ def handle_pkt(packet):
                 content_id=packet[icn].content_id, 
                 total_chunks=total_chunks, 
                 chunk_id=i, 
-                flag=1, 
+                flag=1,
+                source_switch=0,
                 data=chunk
             )
 

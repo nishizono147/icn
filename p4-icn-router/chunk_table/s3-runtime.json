@@ -4,6 +4,26 @@
     "bmv2_json": "build/switch.json",
     "table_entries": [
       {
+        "table": "MyIngress.switch_config",
+        "match": {
+          "hdr.ethernet.etherType": [34997]
+        },
+        "action_name": "MyIngress.set_local_switch_id",
+        "action_params": {
+          "switch_id": 3
+        }
+      },
+      {
+        "table": "MyIngress.switch_config",
+        "match": {
+          "hdr.ethernet.etherType": [34998]
+        },
+        "action_name": "MyIngress.set_local_switch_id",
+        "action_params": {
+          "switch_id": 3
+        }
+      },
+      {
         "table": "MyIngress.foward_interest",
         "match": {
           "hdr.ethernet.srcAddr": [

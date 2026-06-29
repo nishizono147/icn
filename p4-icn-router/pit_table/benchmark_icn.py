@@ -186,8 +186,8 @@ def main():
         "-n", "--trials", type=int, default=10, help="Number of consecutive trials (default: 10)"
     )
     parser.add_argument(
-        "-i", "--interval", type=float, default=0.2,
-        help="Seconds between trials (default: 0.2)"
+        "-i", "--interval", type=float, default=1.0,
+        help="Seconds between trials (default: 1.0)"
     )
     parser.add_argument(
         "-t", "--timeout", type=float, default=5.0,

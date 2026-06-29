@@ -94,13 +94,15 @@ def handle_pkt(pkt):
         if cid not in buffers:
             buffers[cid] = {}
             chunk_counts[cid] = total
-            print(f"Start receiving content_id {cid} ({total} chunks)")
+            src_sw = pkt[payload].source_switch
+            print(f"Start receiving content_id {cid} ({total} chunks, source_switch={src_sw})")
 
         # 受信したチャンクを保存
         buffers[cid][chunk_id] = data
 
         # 進捗ログを出力
-        print(f"Got chunk {chunk_id + 1}/{total} for content_id {cid}")
+        src_sw = pkt[payload].source_switch
+        print(f"Got chunk {chunk_id + 1}/{total} for content_id {cid} (source_switch={src_sw})")
 
         # 全チャンク揃ったか確認
         if len(buffers[cid]) == chunk_counts[cid]:

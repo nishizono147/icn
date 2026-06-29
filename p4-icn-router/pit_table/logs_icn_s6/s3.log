@@ -1,0 +1,1569 @@
+Calling target program-options parser
+[05:04:51.806] [bmv2] [D] [thread 23599] Set default default entry for table 'tbl_switch148': switch148 - 
+[05:04:51.806] [bmv2] [D] [thread 23599] Set default default entry for table 'tbl_switch150': switch150 - 
+[05:04:51.806] [bmv2] [D] [thread 23599] Set default default entry for table 'tbl_return_content': MyIngress.return_content - 
+[05:04:51.806] [bmv2] [D] [thread 23599] Set default default entry for table 'tbl_return_content_0': MyIngress.return_content - 
+[05:04:51.806] [bmv2] [D] [thread 23599] Set default default entry for table 'tbl_switch155': switch155 - 
+[05:04:51.806] [bmv2] [D] [thread 23599] Set default default entry for table 'tbl_data_forward': MyIngress.data_forward - 
+[05:04:51.806] [bmv2] [D] [thread 23599] Set default default entry for table 'tbl_switch159': switch159 - 
+[05:04:51.806] [bmv2] [D] [thread 23599] Set default default entry for table 'MyIngress.foward_interest': MyIngress.drop - 
+[05:04:51.806] [bmv2] [D] [thread 23599] Set default default entry for table 'tbl_cache_content': MyIngress.cache_content - 
+[05:04:51.806] [bmv2] [D] [thread 23599] Set default default entry for table 'tbl_data_forward_0': MyIngress.data_forward - 
+Adding interface s3-eth1 as port 1
+[05:04:51.806] [bmv2] [D] [thread 23599] Adding interface s3-eth1 as port 1
+Adding interface s3-eth2 as port 2
+[05:04:51.849] [bmv2] [D] [thread 23599] Adding interface s3-eth2 as port 2
+Server listening on 0.0.0.0:50068
+[05:04:51.864] [bmv2] [I] [thread 23599] Starting Thrift server on port 9107
+[05:04:51.864] [bmv2] [I] [thread 23599] Thrift server was started
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Processing packet received on port 1
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Parser 'parser': start
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Extracting header 'ethernet'
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] Bytes parsed: 14
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Parser 'parser': end
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Pipeline 'ingress': start
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Looking up key:
+
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] Action MyIngress.data_forward
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:51.978] [bmv2] [T] [thread 23615] [0.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Pipeline 'ingress': end
+[05:04:51.978] [bmv2] [D] [thread 23615] [0.0] [cxt 0] Egress port is 0
+[05:04:51.978] [bmv2] [D] [thread 23616] [0.0] [cxt 0] Pipeline 'egress': start
+[05:04:51.978] [bmv2] [D] [thread 23616] [0.0] [cxt 0] Pipeline 'egress': end
+[05:04:51.978] [bmv2] [D] [thread 23616] [0.0] [cxt 0] Deparser 'deparser': start
+[05:04:51.978] [bmv2] [D] [thread 23616] [0.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:51.978] [bmv2] [D] [thread 23616] [0.0] [cxt 0] Deparser 'deparser': end
+[05:04:51.978] [bmv2] [D] [thread 23620] [0.0] [cxt 0] Transmitting packet of size 211 out of port 0
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Processing packet received on port 1
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Parser 'parser': start
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] Bytes parsed: 14
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Parser 'parser': end
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Looking up key:
+
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.246] [bmv2] [T] [thread 23615] [1.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.246] [bmv2] [D] [thread 23615] [1.0] [cxt 0] Egress port is 0
+[05:04:52.246] [bmv2] [D] [thread 23616] [1.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.246] [bmv2] [D] [thread 23616] [1.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.246] [bmv2] [D] [thread 23616] [1.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.246] [bmv2] [D] [thread 23616] [1.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.246] [bmv2] [D] [thread 23616] [1.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.246] [bmv2] [D] [thread 23620] [1.0] [cxt 0] Transmitting packet of size 211 out of port 0
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Processing packet received on port 1
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Parser 'parser': start
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] Bytes parsed: 14
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Parser 'parser': end
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Looking up key:
+
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.385] [bmv2] [T] [thread 23615] [2.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.385] [bmv2] [D] [thread 23615] [2.0] [cxt 0] Egress port is 0
+[05:04:52.385] [bmv2] [D] [thread 23616] [2.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.385] [bmv2] [D] [thread 23616] [2.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.385] [bmv2] [D] [thread 23616] [2.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.385] [bmv2] [D] [thread 23616] [2.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.385] [bmv2] [D] [thread 23616] [2.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.385] [bmv2] [D] [thread 23620] [2.0] [cxt 0] Transmitting packet of size 110 out of port 0
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Processing packet received on port 1
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Parser 'parser': start
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] Bytes parsed: 14
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Parser 'parser': end
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Looking up key:
+
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.479] [bmv2] [T] [thread 23615] [3.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.479] [bmv2] [D] [thread 23615] [3.0] [cxt 0] Egress port is 0
+[05:04:52.479] [bmv2] [D] [thread 23616] [3.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.479] [bmv2] [D] [thread 23616] [3.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.479] [bmv2] [D] [thread 23616] [3.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.479] [bmv2] [D] [thread 23616] [3.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.479] [bmv2] [D] [thread 23616] [3.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.479] [bmv2] [D] [thread 23620] [3.0] [cxt 0] Transmitting packet of size 199 out of port 0
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Processing packet received on port 2
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Parser 'parser': start
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] Bytes parsed: 14
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Parser 'parser': end
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Looking up key:
+
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.484] [bmv2] [T] [thread 23615] [4.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.484] [bmv2] [D] [thread 23615] [4.0] [cxt 0] Egress port is 0
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Processing packet received on port 2
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Parser 'parser': start
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] Bytes parsed: 14
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Parser 'parser': end
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Looking up key:
+
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.484] [bmv2] [T] [thread 23615] [5.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.484] [bmv2] [D] [thread 23615] [5.0] [cxt 0] Egress port is 0
+[05:04:52.484] [bmv2] [D] [thread 23616] [4.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.484] [bmv2] [D] [thread 23616] [4.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.484] [bmv2] [D] [thread 23616] [4.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.484] [bmv2] [D] [thread 23616] [4.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.484] [bmv2] [D] [thread 23616] [4.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.484] [bmv2] [D] [thread 23616] [5.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.484] [bmv2] [D] [thread 23616] [5.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.484] [bmv2] [D] [thread 23616] [5.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.484] [bmv2] [D] [thread 23616] [5.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.484] [bmv2] [D] [thread 23616] [5.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.484] [bmv2] [D] [thread 23620] [4.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[05:04:52.484] [bmv2] [D] [thread 23620] [5.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Processing packet received on port 2
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Parser 'parser': start
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] Bytes parsed: 14
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Parser 'parser': end
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Looking up key:
+
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.490] [bmv2] [T] [thread 23615] [6.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.490] [bmv2] [D] [thread 23615] [6.0] [cxt 0] Egress port is 0
+[05:04:52.490] [bmv2] [D] [thread 23616] [6.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.490] [bmv2] [D] [thread 23616] [6.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.490] [bmv2] [D] [thread 23616] [6.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.490] [bmv2] [D] [thread 23616] [6.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.490] [bmv2] [D] [thread 23616] [6.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.490] [bmv2] [D] [thread 23620] [6.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Processing packet received on port 2
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Parser 'parser': start
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] Bytes parsed: 14
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Parser 'parser': end
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Looking up key:
+
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.549] [bmv2] [T] [thread 23615] [7.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.549] [bmv2] [D] [thread 23615] [7.0] [cxt 0] Egress port is 0
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Processing packet received on port 2
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Parser 'parser': start
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] Bytes parsed: 14
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Parser 'parser': end
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Looking up key:
+
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.549] [bmv2] [D] [thread 23616] [7.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.549] [bmv2] [D] [thread 23616] [7.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.549] [bmv2] [D] [thread 23616] [7.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.549] [bmv2] [D] [thread 23616] [7.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.549] [bmv2] [D] [thread 23616] [7.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.549] [bmv2] [D] [thread 23620] [7.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.549] [bmv2] [T] [thread 23615] [8.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.549] [bmv2] [D] [thread 23615] [8.0] [cxt 0] Egress port is 0
+[05:04:52.549] [bmv2] [D] [thread 23616] [8.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.549] [bmv2] [D] [thread 23616] [8.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.549] [bmv2] [D] [thread 23616] [8.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.549] [bmv2] [D] [thread 23616] [8.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.549] [bmv2] [D] [thread 23616] [8.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.549] [bmv2] [D] [thread 23620] [8.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Processing packet received on port 2
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Parser 'parser': start
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] Bytes parsed: 14
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Parser 'parser': end
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Looking up key:
+
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.552] [bmv2] [T] [thread 23615] [9.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.552] [bmv2] [D] [thread 23615] [9.0] [cxt 0] Egress port is 0
+[05:04:52.552] [bmv2] [D] [thread 23616] [9.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.552] [bmv2] [D] [thread 23616] [9.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.552] [bmv2] [D] [thread 23616] [9.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.552] [bmv2] [D] [thread 23616] [9.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.552] [bmv2] [D] [thread 23616] [9.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.553] [bmv2] [D] [thread 23620] [9.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Processing packet received on port 2
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Parser 'parser': start
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] Bytes parsed: 14
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Parser 'parser': end
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Looking up key:
+
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.565] [bmv2] [T] [thread 23615] [10.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.565] [bmv2] [D] [thread 23615] [10.0] [cxt 0] Egress port is 0
+[05:04:52.565] [bmv2] [D] [thread 23616] [10.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.565] [bmv2] [D] [thread 23616] [10.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.565] [bmv2] [D] [thread 23616] [10.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.565] [bmv2] [D] [thread 23616] [10.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.565] [bmv2] [D] [thread 23616] [10.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.565] [bmv2] [D] [thread 23620] [10.0] [cxt 0] Transmitting packet of size 211 out of port 0
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Processing packet received on port 2
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Parser 'parser': start
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] Bytes parsed: 14
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Parser 'parser': end
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Looking up key:
+
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.594] [bmv2] [T] [thread 23615] [11.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.594] [bmv2] [D] [thread 23615] [11.0] [cxt 0] Egress port is 0
+[05:04:52.594] [bmv2] [D] [thread 23616] [11.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.594] [bmv2] [D] [thread 23616] [11.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.594] [bmv2] [D] [thread 23616] [11.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.594] [bmv2] [D] [thread 23616] [11.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.594] [bmv2] [D] [thread 23616] [11.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.594] [bmv2] [D] [thread 23620] [11.0] [cxt 0] Transmitting packet of size 203 out of port 0
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Processing packet received on port 2
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Parser 'parser': start
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] Bytes parsed: 14
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Parser 'parser': end
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Looking up key:
+
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.600] [bmv2] [T] [thread 23615] [12.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.600] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.601] [bmv2] [D] [thread 23615] [12.0] [cxt 0] Egress port is 0
+[05:04:52.601] [bmv2] [D] [thread 23616] [12.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.601] [bmv2] [D] [thread 23616] [12.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.601] [bmv2] [D] [thread 23616] [12.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.601] [bmv2] [D] [thread 23616] [12.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.601] [bmv2] [D] [thread 23616] [12.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.601] [bmv2] [D] [thread 23620] [12.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Processing packet received on port 1
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Parser 'parser': start
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] Bytes parsed: 14
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Parser 'parser': end
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Looking up key:
+
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.612] [bmv2] [T] [thread 23615] [13.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.612] [bmv2] [D] [thread 23615] [13.0] [cxt 0] Egress port is 0
+[05:04:52.613] [bmv2] [D] [thread 23616] [13.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.613] [bmv2] [D] [thread 23616] [13.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.613] [bmv2] [D] [thread 23616] [13.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.613] [bmv2] [D] [thread 23616] [13.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.613] [bmv2] [D] [thread 23616] [13.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.613] [bmv2] [D] [thread 23620] [13.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Processing packet received on port 2
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Parser 'parser': start
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] Bytes parsed: 14
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Parser 'parser': end
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Looking up key:
+
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.615] [bmv2] [T] [thread 23615] [14.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.615] [bmv2] [D] [thread 23615] [14.0] [cxt 0] Egress port is 0
+[05:04:52.615] [bmv2] [D] [thread 23616] [14.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.615] [bmv2] [D] [thread 23616] [14.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.615] [bmv2] [D] [thread 23616] [14.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.615] [bmv2] [D] [thread 23616] [14.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.615] [bmv2] [D] [thread 23616] [14.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.615] [bmv2] [D] [thread 23620] [14.0] [cxt 0] Transmitting packet of size 211 out of port 0
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Processing packet received on port 1
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Parser 'parser': start
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] Bytes parsed: 14
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Parser 'parser': end
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Looking up key:
+
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.756] [bmv2] [T] [thread 23615] [15.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.756] [bmv2] [D] [thread 23615] [15.0] [cxt 0] Egress port is 0
+[05:04:52.756] [bmv2] [D] [thread 23616] [15.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.756] [bmv2] [D] [thread 23616] [15.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.756] [bmv2] [D] [thread 23616] [15.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.756] [bmv2] [D] [thread 23616] [15.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.756] [bmv2] [D] [thread 23616] [15.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.756] [bmv2] [D] [thread 23620] [15.0] [cxt 0] Transmitting packet of size 203 out of port 0
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Processing packet received on port 2
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Parser 'parser': start
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] Bytes parsed: 14
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Parser 'parser': end
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Looking up key:
+
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.819] [bmv2] [T] [thread 23615] [16.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.819] [bmv2] [D] [thread 23615] [16.0] [cxt 0] Egress port is 0
+[05:04:52.819] [bmv2] [D] [thread 23616] [16.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.819] [bmv2] [D] [thread 23616] [16.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.819] [bmv2] [D] [thread 23616] [16.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.819] [bmv2] [D] [thread 23616] [16.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.819] [bmv2] [D] [thread 23616] [16.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.820] [bmv2] [D] [thread 23620] [16.0] [cxt 0] Transmitting packet of size 211 out of port 0
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Processing packet received on port 2
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Parser 'parser': start
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Extracting header 'ethernet'
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] Bytes parsed: 14
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Parser 'parser': end
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Pipeline 'ingress': start
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Looking up key:
+
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] Action MyIngress.data_forward
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:52.867] [bmv2] [T] [thread 23615] [17.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Pipeline 'ingress': end
+[05:04:52.867] [bmv2] [D] [thread 23615] [17.0] [cxt 0] Egress port is 0
+[05:04:52.867] [bmv2] [D] [thread 23616] [17.0] [cxt 0] Pipeline 'egress': start
+[05:04:52.867] [bmv2] [D] [thread 23616] [17.0] [cxt 0] Pipeline 'egress': end
+[05:04:52.867] [bmv2] [D] [thread 23616] [17.0] [cxt 0] Deparser 'deparser': start
+[05:04:52.867] [bmv2] [D] [thread 23616] [17.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:52.867] [bmv2] [D] [thread 23616] [17.0] [cxt 0] Deparser 'deparser': end
+[05:04:52.867] [bmv2] [D] [thread 23620] [17.0] [cxt 0] Transmitting packet of size 211 out of port 0
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Processing packet received on port 2
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Parser 'parser': start
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Extracting header 'ethernet'
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] Bytes parsed: 14
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Parser 'parser': end
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Pipeline 'ingress': start
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Looking up key:
+
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] Action MyIngress.data_forward
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:53.103] [bmv2] [T] [thread 23615] [18.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Pipeline 'ingress': end
+[05:04:53.103] [bmv2] [D] [thread 23615] [18.0] [cxt 0] Egress port is 0
+[05:04:53.103] [bmv2] [D] [thread 23616] [18.0] [cxt 0] Pipeline 'egress': start
+[05:04:53.103] [bmv2] [D] [thread 23616] [18.0] [cxt 0] Pipeline 'egress': end
+[05:04:53.103] [bmv2] [D] [thread 23616] [18.0] [cxt 0] Deparser 'deparser': start
+[05:04:53.103] [bmv2] [D] [thread 23616] [18.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:53.103] [bmv2] [D] [thread 23616] [18.0] [cxt 0] Deparser 'deparser': end
+[05:04:53.103] [bmv2] [D] [thread 23620] [18.0] [cxt 0] Transmitting packet of size 211 out of port 0
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Processing packet received on port 2
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Parser 'parser': start
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Extracting header 'ethernet'
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] Bytes parsed: 14
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Parser 'parser': end
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Pipeline 'ingress': start
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Looking up key:
+
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] Action MyIngress.data_forward
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:53.119] [bmv2] [T] [thread 23615] [19.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Pipeline 'ingress': end
+[05:04:53.119] [bmv2] [D] [thread 23615] [19.0] [cxt 0] Egress port is 0
+[05:04:53.119] [bmv2] [D] [thread 23616] [19.0] [cxt 0] Pipeline 'egress': start
+[05:04:53.119] [bmv2] [D] [thread 23616] [19.0] [cxt 0] Pipeline 'egress': end
+[05:04:53.119] [bmv2] [D] [thread 23616] [19.0] [cxt 0] Deparser 'deparser': start
+[05:04:53.119] [bmv2] [D] [thread 23616] [19.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:53.119] [bmv2] [D] [thread 23616] [19.0] [cxt 0] Deparser 'deparser': end
+[05:04:53.120] [bmv2] [D] [thread 23620] [19.0] [cxt 0] Transmitting packet of size 211 out of port 0
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Processing packet received on port 2
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Parser 'parser': start
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Extracting header 'ethernet'
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] Bytes parsed: 14
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Parser 'parser': end
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Pipeline 'ingress': start
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Looking up key:
+
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] Action MyIngress.data_forward
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:53.303] [bmv2] [T] [thread 23615] [20.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Pipeline 'ingress': end
+[05:04:53.303] [bmv2] [D] [thread 23615] [20.0] [cxt 0] Egress port is 0
+[05:04:53.303] [bmv2] [D] [thread 23616] [20.0] [cxt 0] Pipeline 'egress': start
+[05:04:53.303] [bmv2] [D] [thread 23616] [20.0] [cxt 0] Pipeline 'egress': end
+[05:04:53.303] [bmv2] [D] [thread 23616] [20.0] [cxt 0] Deparser 'deparser': start
+[05:04:53.303] [bmv2] [D] [thread 23616] [20.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:53.303] [bmv2] [D] [thread 23616] [20.0] [cxt 0] Deparser 'deparser': end
+[05:04:53.304] [bmv2] [D] [thread 23620] [20.0] [cxt 0] Transmitting packet of size 199 out of port 0
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Processing packet received on port 2
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Parser 'parser': start
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Extracting header 'ethernet'
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] Bytes parsed: 14
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Parser 'parser': end
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Pipeline 'ingress': start
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Looking up key:
+
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] Action MyIngress.data_forward
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:53.316] [bmv2] [T] [thread 23615] [21.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Pipeline 'ingress': end
+[05:04:53.316] [bmv2] [D] [thread 23615] [21.0] [cxt 0] Egress port is 0
+[05:04:53.316] [bmv2] [D] [thread 23616] [21.0] [cxt 0] Pipeline 'egress': start
+[05:04:53.316] [bmv2] [D] [thread 23616] [21.0] [cxt 0] Pipeline 'egress': end
+[05:04:53.316] [bmv2] [D] [thread 23616] [21.0] [cxt 0] Deparser 'deparser': start
+[05:04:53.316] [bmv2] [D] [thread 23616] [21.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:53.316] [bmv2] [D] [thread 23616] [21.0] [cxt 0] Deparser 'deparser': end
+[05:04:53.317] [bmv2] [D] [thread 23620] [21.0] [cxt 0] Transmitting packet of size 90 out of port 0
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Processing packet received on port 2
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Parser 'parser': start
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Extracting header 'ethernet'
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] Bytes parsed: 14
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Parser 'parser': end
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Pipeline 'ingress': start
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Looking up key:
+
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] Action MyIngress.data_forward
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:53.319] [bmv2] [T] [thread 23615] [22.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Pipeline 'ingress': end
+[05:04:53.319] [bmv2] [D] [thread 23615] [22.0] [cxt 0] Egress port is 0
+[05:04:53.319] [bmv2] [D] [thread 23616] [22.0] [cxt 0] Pipeline 'egress': start
+[05:04:53.319] [bmv2] [D] [thread 23616] [22.0] [cxt 0] Pipeline 'egress': end
+[05:04:53.319] [bmv2] [D] [thread 23616] [22.0] [cxt 0] Deparser 'deparser': start
+[05:04:53.319] [bmv2] [D] [thread 23616] [22.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:53.319] [bmv2] [D] [thread 23616] [22.0] [cxt 0] Deparser 'deparser': end
+[05:04:53.320] [bmv2] [D] [thread 23620] [22.0] [cxt 0] Transmitting packet of size 199 out of port 0
+[05:04:53.370] [bmv2] [W] [thread 23645] [P4Runtime] p4::tmp::P4DeviceConfig is deprecated
+[05:04:53.374] [bmv2] [D] [thread 23645] Set default default entry for table 'tbl_switch148': switch148 - 
+[05:04:53.374] [bmv2] [D] [thread 23645] Set default default entry for table 'tbl_switch150': switch150 - 
+[05:04:53.374] [bmv2] [D] [thread 23645] Set default default entry for table 'tbl_return_content': MyIngress.return_content - 
+[05:04:53.374] [bmv2] [D] [thread 23645] Set default default entry for table 'tbl_return_content_0': MyIngress.return_content - 
+[05:04:53.374] [bmv2] [D] [thread 23645] Set default default entry for table 'tbl_switch155': switch155 - 
+[05:04:53.374] [bmv2] [D] [thread 23645] Set default default entry for table 'tbl_data_forward': MyIngress.data_forward - 
+[05:04:53.374] [bmv2] [D] [thread 23645] Set default default entry for table 'tbl_switch159': switch159 - 
+[05:04:53.374] [bmv2] [D] [thread 23645] Set default default entry for table 'MyIngress.foward_interest': MyIngress.drop - 
+[05:04:53.374] [bmv2] [D] [thread 23645] Set default default entry for table 'tbl_cache_content': MyIngress.cache_content - 
+[05:04:53.374] [bmv2] [D] [thread 23645] Set default default entry for table 'tbl_data_forward_0': MyIngress.data_forward - 
+[05:04:53.376] [bmv2] [D] [thread 23645] simple_switch target has been notified of a config swap
+[05:04:53.379] [bmv2] [D] [thread 23645] Entry 0 added to table 'MyIngress.foward_interest'
+[05:04:53.379] [bmv2] [D] [thread 23645] Dumping entry 0
+Match key:
+* hdr.ethernet.srcAddr: EXACT     080000000200
+Action entry: MyIngress.dup_interest - 80000000222,1,
+
+[05:04:53.497] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Processing packet received on port 1
+[05:04:53.497] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Parser 'parser': start
+[05:04:53.498] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:53.498] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Extracting header 'ethernet'
+[05:04:53.498] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] Bytes parsed: 14
+[05:04:53.498] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Parser 'parser': end
+[05:04:53.498] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Pipeline 'ingress': start
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:53.498] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Looking up key:
+
+[05:04:53.498] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:53.498] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] Action MyIngress.data_forward
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:53.498] [bmv2] [T] [thread 23615] [23.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:53.498] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Pipeline 'ingress': end
+[05:04:53.498] [bmv2] [D] [thread 23615] [23.0] [cxt 0] Egress port is 0
+[05:04:53.498] [bmv2] [D] [thread 23616] [23.0] [cxt 0] Pipeline 'egress': start
+[05:04:53.498] [bmv2] [D] [thread 23616] [23.0] [cxt 0] Pipeline 'egress': end
+[05:04:53.498] [bmv2] [D] [thread 23616] [23.0] [cxt 0] Deparser 'deparser': start
+[05:04:53.498] [bmv2] [D] [thread 23616] [23.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:53.498] [bmv2] [D] [thread 23616] [23.0] [cxt 0] Deparser 'deparser': end
+[05:04:53.498] [bmv2] [D] [thread 23620] [23.0] [cxt 0] Transmitting packet of size 199 out of port 0
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Processing packet received on port 2
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Parser 'parser': start
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Extracting header 'ethernet'
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] Bytes parsed: 14
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Parser 'parser': end
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Pipeline 'ingress': start
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Looking up key:
+
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] Action MyIngress.data_forward
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:53.508] [bmv2] [T] [thread 23615] [24.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Pipeline 'ingress': end
+[05:04:53.508] [bmv2] [D] [thread 23615] [24.0] [cxt 0] Egress port is 0
+[05:04:53.508] [bmv2] [D] [thread 23616] [24.0] [cxt 0] Pipeline 'egress': start
+[05:04:53.508] [bmv2] [D] [thread 23616] [24.0] [cxt 0] Pipeline 'egress': end
+[05:04:53.508] [bmv2] [D] [thread 23616] [24.0] [cxt 0] Deparser 'deparser': start
+[05:04:53.508] [bmv2] [D] [thread 23616] [24.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:53.508] [bmv2] [D] [thread 23616] [24.0] [cxt 0] Deparser 'deparser': end
+[05:04:53.508] [bmv2] [D] [thread 23620] [24.0] [cxt 0] Transmitting packet of size 110 out of port 0
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Processing packet received on port 2
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Parser 'parser': start
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Extracting header 'ethernet'
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] Bytes parsed: 14
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Parser 'parser': end
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Pipeline 'ingress': start
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Looking up key:
+
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] Action MyIngress.data_forward
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:53.578] [bmv2] [T] [thread 23615] [25.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Pipeline 'ingress': end
+[05:04:53.578] [bmv2] [D] [thread 23615] [25.0] [cxt 0] Egress port is 0
+[05:04:53.578] [bmv2] [D] [thread 23616] [25.0] [cxt 0] Pipeline 'egress': start
+[05:04:53.578] [bmv2] [D] [thread 23616] [25.0] [cxt 0] Pipeline 'egress': end
+[05:04:53.578] [bmv2] [D] [thread 23616] [25.0] [cxt 0] Deparser 'deparser': start
+[05:04:53.578] [bmv2] [D] [thread 23616] [25.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:53.578] [bmv2] [D] [thread 23616] [25.0] [cxt 0] Deparser 'deparser': end
+[05:04:53.578] [bmv2] [D] [thread 23620] [25.0] [cxt 0] Transmitting packet of size 110 out of port 0
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Processing packet received on port 2
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Parser 'parser': start
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Extracting header 'ethernet'
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] Bytes parsed: 14
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Parser 'parser': end
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Pipeline 'ingress': start
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Looking up key:
+
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] Action MyIngress.data_forward
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:53.591] [bmv2] [T] [thread 23615] [26.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Pipeline 'ingress': end
+[05:04:53.591] [bmv2] [D] [thread 23615] [26.0] [cxt 0] Egress port is 0
+[05:04:53.591] [bmv2] [D] [thread 23616] [26.0] [cxt 0] Pipeline 'egress': start
+[05:04:53.591] [bmv2] [D] [thread 23616] [26.0] [cxt 0] Pipeline 'egress': end
+[05:04:53.591] [bmv2] [D] [thread 23616] [26.0] [cxt 0] Deparser 'deparser': start
+[05:04:53.591] [bmv2] [D] [thread 23616] [26.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:53.591] [bmv2] [D] [thread 23616] [26.0] [cxt 0] Deparser 'deparser': end
+[05:04:53.591] [bmv2] [D] [thread 23620] [26.0] [cxt 0] Transmitting packet of size 203 out of port 0
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Processing packet received on port 2
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Parser 'parser': start
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Extracting header 'ethernet'
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] Bytes parsed: 14
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Parser 'parser': end
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Pipeline 'ingress': start
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Looking up key:
+
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] Action MyIngress.data_forward
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:54.321] [bmv2] [T] [thread 23615] [27.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Pipeline 'ingress': end
+[05:04:54.321] [bmv2] [D] [thread 23615] [27.0] [cxt 0] Egress port is 0
+[05:04:54.321] [bmv2] [D] [thread 23616] [27.0] [cxt 0] Pipeline 'egress': start
+[05:04:54.321] [bmv2] [D] [thread 23616] [27.0] [cxt 0] Pipeline 'egress': end
+[05:04:54.321] [bmv2] [D] [thread 23616] [27.0] [cxt 0] Deparser 'deparser': start
+[05:04:54.321] [bmv2] [D] [thread 23616] [27.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:54.321] [bmv2] [D] [thread 23616] [27.0] [cxt 0] Deparser 'deparser': end
+[05:04:54.322] [bmv2] [D] [thread 23620] [27.0] [cxt 0] Transmitting packet of size 199 out of port 0
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Processing packet received on port 2
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Parser 'parser': start
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Extracting header 'ethernet'
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] Bytes parsed: 14
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Parser 'parser': end
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Pipeline 'ingress': start
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Looking up key:
+
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] Action MyIngress.data_forward
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:54.341] [bmv2] [T] [thread 23615] [28.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Pipeline 'ingress': end
+[05:04:54.341] [bmv2] [D] [thread 23615] [28.0] [cxt 0] Egress port is 0
+[05:04:54.341] [bmv2] [D] [thread 23616] [28.0] [cxt 0] Pipeline 'egress': start
+[05:04:54.341] [bmv2] [D] [thread 23616] [28.0] [cxt 0] Pipeline 'egress': end
+[05:04:54.341] [bmv2] [D] [thread 23616] [28.0] [cxt 0] Deparser 'deparser': start
+[05:04:54.341] [bmv2] [D] [thread 23616] [28.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:54.341] [bmv2] [D] [thread 23616] [28.0] [cxt 0] Deparser 'deparser': end
+[05:04:54.341] [bmv2] [D] [thread 23620] [28.0] [cxt 0] Transmitting packet of size 199 out of port 0
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Processing packet received on port 1
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Parser 'parser': start
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Extracting header 'ethernet'
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] Bytes parsed: 14
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Parser 'parser': end
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Pipeline 'ingress': start
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Looking up key:
+
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] Action MyIngress.data_forward
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:54.761] [bmv2] [T] [thread 23615] [29.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Pipeline 'ingress': end
+[05:04:54.761] [bmv2] [D] [thread 23615] [29.0] [cxt 0] Egress port is 0
+[05:04:54.762] [bmv2] [D] [thread 23616] [29.0] [cxt 0] Pipeline 'egress': start
+[05:04:54.762] [bmv2] [D] [thread 23616] [29.0] [cxt 0] Pipeline 'egress': end
+[05:04:54.762] [bmv2] [D] [thread 23616] [29.0] [cxt 0] Deparser 'deparser': start
+[05:04:54.762] [bmv2] [D] [thread 23616] [29.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:54.762] [bmv2] [D] [thread 23616] [29.0] [cxt 0] Deparser 'deparser': end
+[05:04:54.762] [bmv2] [D] [thread 23620] [29.0] [cxt 0] Transmitting packet of size 203 out of port 0
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Processing packet received on port 1
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Parser 'parser': start
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Extracting header 'ethernet'
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] Bytes parsed: 14
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Parser 'parser': end
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Pipeline 'ingress': start
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Looking up key:
+
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] Action MyIngress.data_forward
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:55.493] [bmv2] [T] [thread 23615] [30.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Pipeline 'ingress': end
+[05:04:55.493] [bmv2] [D] [thread 23615] [30.0] [cxt 0] Egress port is 0
+[05:04:55.493] [bmv2] [D] [thread 23616] [30.0] [cxt 0] Pipeline 'egress': start
+[05:04:55.493] [bmv2] [D] [thread 23616] [30.0] [cxt 0] Pipeline 'egress': end
+[05:04:55.493] [bmv2] [D] [thread 23616] [30.0] [cxt 0] Deparser 'deparser': start
+[05:04:55.493] [bmv2] [D] [thread 23616] [30.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:55.493] [bmv2] [D] [thread 23616] [30.0] [cxt 0] Deparser 'deparser': end
+[05:04:55.493] [bmv2] [D] [thread 23620] [30.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Processing packet received on port 1
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Parser 'parser': start
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Extracting header 'ethernet'
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] Bytes parsed: 14
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Parser 'parser': end
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Pipeline 'ingress': start
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Looking up key:
+
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] Action MyIngress.data_forward
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:55.527] [bmv2] [T] [thread 23615] [31.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Pipeline 'ingress': end
+[05:04:55.527] [bmv2] [D] [thread 23615] [31.0] [cxt 0] Egress port is 0
+[05:04:55.527] [bmv2] [D] [thread 23616] [31.0] [cxt 0] Pipeline 'egress': start
+[05:04:55.527] [bmv2] [D] [thread 23616] [31.0] [cxt 0] Pipeline 'egress': end
+[05:04:55.527] [bmv2] [D] [thread 23616] [31.0] [cxt 0] Deparser 'deparser': start
+[05:04:55.527] [bmv2] [D] [thread 23616] [31.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:55.527] [bmv2] [D] [thread 23616] [31.0] [cxt 0] Deparser 'deparser': end
+[05:04:55.527] [bmv2] [D] [thread 23620] [31.0] [cxt 0] Transmitting packet of size 199 out of port 0
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Processing packet received on port 2
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Parser 'parser': start
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Extracting header 'ethernet'
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] Bytes parsed: 14
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Parser 'parser': end
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Pipeline 'ingress': start
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Looking up key:
+
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] Action MyIngress.data_forward
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:55.593] [bmv2] [T] [thread 23615] [32.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Pipeline 'ingress': end
+[05:04:55.593] [bmv2] [D] [thread 23615] [32.0] [cxt 0] Egress port is 0
+[05:04:55.593] [bmv2] [D] [thread 23616] [32.0] [cxt 0] Pipeline 'egress': start
+[05:04:55.593] [bmv2] [D] [thread 23616] [32.0] [cxt 0] Pipeline 'egress': end
+[05:04:55.593] [bmv2] [D] [thread 23616] [32.0] [cxt 0] Deparser 'deparser': start
+[05:04:55.593] [bmv2] [D] [thread 23616] [32.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:55.593] [bmv2] [D] [thread 23616] [32.0] [cxt 0] Deparser 'deparser': end
+[05:04:55.593] [bmv2] [D] [thread 23620] [32.0] [cxt 0] Transmitting packet of size 203 out of port 0
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Processing packet received on port 2
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Parser 'parser': start
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Extracting header 'ethernet'
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] Bytes parsed: 14
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Parser 'parser': end
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Pipeline 'ingress': start
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Looking up key:
+
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] Action MyIngress.data_forward
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:56.341] [bmv2] [T] [thread 23615] [33.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Pipeline 'ingress': end
+[05:04:56.341] [bmv2] [D] [thread 23615] [33.0] [cxt 0] Egress port is 0
+[05:04:56.341] [bmv2] [D] [thread 23616] [33.0] [cxt 0] Pipeline 'egress': start
+[05:04:56.341] [bmv2] [D] [thread 23616] [33.0] [cxt 0] Pipeline 'egress': end
+[05:04:56.341] [bmv2] [D] [thread 23616] [33.0] [cxt 0] Deparser 'deparser': start
+[05:04:56.341] [bmv2] [D] [thread 23616] [33.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:56.341] [bmv2] [D] [thread 23616] [33.0] [cxt 0] Deparser 'deparser': end
+[05:04:56.342] [bmv2] [D] [thread 23620] [33.0] [cxt 0] Transmitting packet of size 199 out of port 0
+[05:04:56.359] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Processing packet received on port 2
+[05:04:56.359] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Parser 'parser': start
+[05:04:56.359] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:56.359] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Extracting header 'ethernet'
+[05:04:56.359] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:56.359] [bmv2] [T] [thread 23615] [34.0] [cxt 0] Bytes parsed: 14
+[05:04:56.359] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Parser 'parser': end
+[05:04:56.359] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Pipeline 'ingress': start
+[05:04:56.359] [bmv2] [T] [thread 23615] [34.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:56.359] [bmv2] [T] [thread 23615] [34.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:56.359] [bmv2] [T] [thread 23615] [34.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:56.359] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Looking up key:
+
+[05:04:56.359] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:56.359] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:56.359] [bmv2] [T] [thread 23615] [34.0] [cxt 0] Action MyIngress.data_forward
+[05:04:56.359] [bmv2] [T] [thread 23615] [34.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:56.359] [bmv2] [T] [thread 23615] [34.0] [cxt 0] Read register 'MyIngress.pit_table' at index 0 read value 0
+[05:04:56.359] [bmv2] [T] [thread 23615] [34.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:56.359] [bmv2] [T] [thread 23615] [34.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:56.359] [bmv2] [T] [thread 23615] [34.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 0 with value 0
+[05:04:56.360] [bmv2] [T] [thread 23615] [34.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:56.360] [bmv2] [T] [thread 23615] [34.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:56.360] [bmv2] [T] [thread 23615] [34.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:56.360] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Pipeline 'ingress': end
+[05:04:56.360] [bmv2] [D] [thread 23615] [34.0] [cxt 0] Egress port is 0
+[05:04:56.360] [bmv2] [D] [thread 23616] [34.0] [cxt 0] Pipeline 'egress': start
+[05:04:56.360] [bmv2] [D] [thread 23616] [34.0] [cxt 0] Pipeline 'egress': end
+[05:04:56.360] [bmv2] [D] [thread 23616] [34.0] [cxt 0] Deparser 'deparser': start
+[05:04:56.360] [bmv2] [D] [thread 23616] [34.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:56.360] [bmv2] [D] [thread 23616] [34.0] [cxt 0] Deparser 'deparser': end
+[05:04:56.360] [bmv2] [D] [thread 23620] [34.0] [cxt 0] Transmitting packet of size 199 out of port 0
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Processing packet received on port 2
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Parser 'parser': start
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Extracting header 'ethernet'
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Parser state 'start': key is 88b5
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] Bytes parsed: 14
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Parser 'parser' entering state 'parse_icn'
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Extracting header 'icn'
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Parser state 'parse_icn' has no switch, going to default next state
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] Bytes parsed: 22
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Parser 'parser': end
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Pipeline 'ingress': start
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is true
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] Applying table 'tbl_switch148'
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Looking up key:
+
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Table 'tbl_switch148': miss
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Action entry is switch148 - 
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] Action switch148
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] switch.p4(148) Primitive content_cache.read(cached_data, hdr.icn.content_id)
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] Read register 'MyIngress.content_cache' at index 1 read value 0
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] switch.p4(149) Condition "cached_data != 0" (node_4) is false
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] Applying table 'tbl_switch159'
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Looking up key:
+
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Table 'tbl_switch159': miss
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Action entry is switch159 - 
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] Action switch159
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] switch.p4(159) Primitive hdr.icn.flag = 0
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] switch.p4(160) Primitive pit_table.write(hdr.icn.content_id, standard_metadata.ingress_port)
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 2
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] Applying table 'MyIngress.foward_interest'
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Looking up key:
+* hdr.ethernet.srcAddr: 080000000200
+
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Table 'MyIngress.foward_interest': hit with handle 0
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Dumping entry 0
+Match key:
+* hdr.ethernet.srcAddr: EXACT     080000000200
+Action entry: MyIngress.dup_interest - 80000000222,1,
+
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Action entry is MyIngress.dup_interest - 80000000222,1,
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] Action MyIngress.dup_interest
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] switch.p4(124) Primitive standard_metadata.egress_spec = port
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] switch.p4(125) Primitive hdr.ethernet.srcAddr = hdr.ethernet.dstAddr
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] switch.p4(126) Primitive hdr.ethernet.dstAddr = dstAddr
+[05:04:56.451] [bmv2] [T] [thread 23615] [35.0] [cxt 0] switch.p4(128) Primitive hdr.icn.hop_count = hdr.icn.hop_count - 1
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Pipeline 'ingress': end
+[05:04:56.451] [bmv2] [D] [thread 23615] [35.0] [cxt 0] Egress port is 1
+[05:04:56.452] [bmv2] [D] [thread 23617] [35.0] [cxt 0] Pipeline 'egress': start
+[05:04:56.452] [bmv2] [D] [thread 23617] [35.0] [cxt 0] Pipeline 'egress': end
+[05:04:56.452] [bmv2] [D] [thread 23617] [35.0] [cxt 0] Deparser 'deparser': start
+[05:04:56.452] [bmv2] [D] [thread 23617] [35.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:56.452] [bmv2] [D] [thread 23617] [35.0] [cxt 0] Deparsing header 'icn'
+[05:04:56.452] [bmv2] [D] [thread 23617] [35.0] [cxt 0] Deparser 'deparser': end
+[05:04:56.452] [bmv2] [D] [thread 23620] [35.0] [cxt 0] Transmitting packet of size 22 out of port 1
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Processing packet received on port 1
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Parser 'parser': start
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Extracting header 'ethernet'
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Parser state 'start': key is 88b6
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] Bytes parsed: 14
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Parser 'parser' entering state 'parse_payload'
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Extracting header 'payload'
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Parser state 'parse_payload' has no switch, going to default next state
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] Bytes parsed: 276
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Parser 'parser': end
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Pipeline 'ingress': start
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is true
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] Applying table 'tbl_cache_content'
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Looking up key:
+
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Table 'tbl_cache_content': miss
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Action entry is MyIngress.cache_content - 
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] Action MyIngress.cache_content
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] switch.p4(106) Primitive content_cache.write(hdr.payload.content_id, hdr.payload.data)
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] Wrote register 'MyIngress.content_cache' at index 1 with value 17334248032272856919049904129148938617700988014304292665051363529817104491524797347555222073430792320059939653561838142512049133114388715375014781493453850835185074611781570404847019710571613655373669594595135033889630776998479070814982991093682257016220976393663747692290960138236990461169158975424217495205235714645535325005531839232559780229597835373266260635303518876566160865710124377185704679970288330545603901891183133829188678302433295812412601508611578502040926066791030664212907508769521753768992941363800118204875972853288437881499254902667790476020116895095900119866747339270646056253520273313150781095936
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] switch.p4(107) Primitive hdr.payload.flag = 0
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Looking up key:
+
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] Action MyIngress.data_forward
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] Read register 'MyIngress.pit_table' at index 1 read value 2
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 0
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:56.469] [bmv2] [T] [thread 23615] [36.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Pipeline 'ingress': end
+[05:04:56.469] [bmv2] [D] [thread 23615] [36.0] [cxt 0] Egress port is 2
+[05:04:56.469] [bmv2] [D] [thread 23618] [36.0] [cxt 0] Pipeline 'egress': start
+[05:04:56.469] [bmv2] [D] [thread 23618] [36.0] [cxt 0] Pipeline 'egress': end
+[05:04:56.469] [bmv2] [D] [thread 23618] [36.0] [cxt 0] Deparser 'deparser': start
+[05:04:56.469] [bmv2] [D] [thread 23618] [36.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:56.469] [bmv2] [D] [thread 23618] [36.0] [cxt 0] Deparsing header 'payload'
+[05:04:56.469] [bmv2] [D] [thread 23618] [36.0] [cxt 0] Deparser 'deparser': end
+[05:04:56.469] [bmv2] [D] [thread 23620] [36.0] [cxt 0] Transmitting packet of size 276 out of port 2
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Processing packet received on port 2
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Parser 'parser': start
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Extracting header 'ethernet'
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] Bytes parsed: 14
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Parser 'parser': end
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Pipeline 'ingress': start
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Looking up key:
+
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] Action MyIngress.data_forward
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] Read register 'MyIngress.pit_table' at index 1 read value 0
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 0
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:57.089] [bmv2] [T] [thread 23615] [37.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Pipeline 'ingress': end
+[05:04:57.089] [bmv2] [D] [thread 23615] [37.0] [cxt 0] Egress port is 0
+[05:04:57.089] [bmv2] [D] [thread 23616] [37.0] [cxt 0] Pipeline 'egress': start
+[05:04:57.089] [bmv2] [D] [thread 23616] [37.0] [cxt 0] Pipeline 'egress': end
+[05:04:57.089] [bmv2] [D] [thread 23616] [37.0] [cxt 0] Deparser 'deparser': start
+[05:04:57.089] [bmv2] [D] [thread 23616] [37.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:57.089] [bmv2] [D] [thread 23616] [37.0] [cxt 0] Deparser 'deparser': end
+[05:04:57.089] [bmv2] [D] [thread 23620] [37.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Processing packet received on port 2
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Parser 'parser': start
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Extracting header 'ethernet'
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] Bytes parsed: 14
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Parser 'parser': end
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Pipeline 'ingress': start
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Looking up key:
+
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] Action MyIngress.data_forward
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] Read register 'MyIngress.pit_table' at index 1 read value 0
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 0
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:57.090] [bmv2] [T] [thread 23615] [38.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Pipeline 'ingress': end
+[05:04:57.090] [bmv2] [D] [thread 23615] [38.0] [cxt 0] Egress port is 0
+[05:04:57.090] [bmv2] [D] [thread 23616] [38.0] [cxt 0] Pipeline 'egress': start
+[05:04:57.090] [bmv2] [D] [thread 23616] [38.0] [cxt 0] Pipeline 'egress': end
+[05:04:57.090] [bmv2] [D] [thread 23616] [38.0] [cxt 0] Deparser 'deparser': start
+[05:04:57.090] [bmv2] [D] [thread 23616] [38.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:57.090] [bmv2] [D] [thread 23616] [38.0] [cxt 0] Deparser 'deparser': end
+[05:04:57.090] [bmv2] [D] [thread 23620] [38.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[05:04:57.376] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Processing packet received on port 2
+[05:04:57.376] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Parser 'parser': start
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Extracting header 'ethernet'
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Parser state 'start': key is 88b5
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Bytes parsed: 14
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Parser 'parser' entering state 'parse_icn'
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Extracting header 'icn'
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Parser state 'parse_icn' has no switch, going to default next state
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Bytes parsed: 22
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Parser 'parser': end
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Pipeline 'ingress': start
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is true
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Applying table 'tbl_switch148'
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Looking up key:
+
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Table 'tbl_switch148': miss
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Action entry is switch148 - 
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Action switch148
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(148) Primitive content_cache.read(cached_data, hdr.icn.content_id)
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Read register 'MyIngress.content_cache' at index 1 read value 17334248032272856919049904129148938617700988014304292665051363529817104491524797347555222073430792320059939653561838142512049133114388715375014781493453850835185074611781570404847019710571613655373669594595135033889630776998479070814982991093682257016220976393663747692290960138236990461169158975424217495205235714645535325005531839232559780229597835373266260635303518876566160865710124377185704679970288330545603901891183133829188678302433295812412601508611578502040926066791030664212907508769521753768992941363800118204875972853288437881499254902667790476020116895095900119866747339270646056253520273313150781095936
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(149) Condition "cached_data != 0" (node_4) is true
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Applying table 'tbl_switch150'
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Looking up key:
+
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Table 'tbl_switch150': miss
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Action entry is switch150 - 
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Action switch150
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(150) Primitive pit_table.write(hdr.icn.content_id, standard_metadata.ingress_port)
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 2
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(151) Condition "hdr.icn.flag == 1" (node_6) is false
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Applying table 'tbl_return_content_0'
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Looking up key:
+
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Table 'tbl_return_content_0': miss
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Action entry is MyIngress.return_content - 
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Action MyIngress.return_content
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(112) Primitive content_cache.read(cached_data, hdr.icn.content_id)
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Read register 'MyIngress.content_cache' at index 1 read value 17334248032272856919049904129148938617700988014304292665051363529817104491524797347555222073430792320059939653561838142512049133114388715375014781493453850835185074611781570404847019710571613655373669594595135033889630776998479070814982991093682257016220976393663747692290960138236990461169158975424217495205235714645535325005531839232559780229597835373266260635303518876566160865710124377185704679970288330545603901891183133829188678302433295812412601508611578502040926066791030664212907508769521753768992941363800118204875972853288437881499254902667790476020116895095900119866747339270646056253520273313150781095936
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(113) Primitive hdr.payload.setValid()
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(114) Primitive hdr.payload.data = cached_data
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(115) Primitive hdr.payload.content_id = hdr.icn.content_id
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(116) Primitive hdr.payload.ttl = 8
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(117) Primitive hdr.payload.flag = 1
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(118) Primitive hdr.ethernet.etherType = 0x88B6
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(119) Primitive hdr.icn.setInvalid()
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Applying table 'tbl_switch155'
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Looking up key:
+
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Table 'tbl_switch155': miss
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Action entry is switch155 - 
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Action switch155
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(155) Primitive content_cache.write(hdr.payload.content_id, 0)
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Wrote register 'MyIngress.content_cache' at index 1 with value 0
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Applying table 'tbl_data_forward'
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Looking up key:
+
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Table 'tbl_data_forward': miss
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Action MyIngress.data_forward
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Read register 'MyIngress.pit_table' at index 1 read value 2
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 0
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:57.377] [bmv2] [T] [thread 23615] [39.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Pipeline 'ingress': end
+[05:04:57.377] [bmv2] [D] [thread 23615] [39.0] [cxt 0] Egress port is 2
+[05:04:57.378] [bmv2] [D] [thread 23618] [39.0] [cxt 0] Pipeline 'egress': start
+[05:04:57.378] [bmv2] [D] [thread 23618] [39.0] [cxt 0] Pipeline 'egress': end
+[05:04:57.378] [bmv2] [D] [thread 23618] [39.0] [cxt 0] Deparser 'deparser': start
+[05:04:57.378] [bmv2] [D] [thread 23618] [39.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:57.378] [bmv2] [D] [thread 23618] [39.0] [cxt 0] Deparsing header 'payload'
+[05:04:57.378] [bmv2] [D] [thread 23618] [39.0] [cxt 0] Deparser 'deparser': end
+[05:04:57.378] [bmv2] [D] [thread 23620] [39.0] [cxt 0] Transmitting packet of size 276 out of port 2
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Processing packet received on port 1
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Parser 'parser': start
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Extracting header 'ethernet'
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] Bytes parsed: 14
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Parser 'parser': end
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Pipeline 'ingress': start
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is true
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] Applying table 'tbl_cache_content'
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Looking up key:
+
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Table 'tbl_cache_content': miss
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Action entry is MyIngress.cache_content - 
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] Action MyIngress.cache_content
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] switch.p4(106) Primitive content_cache.write(hdr.payload.content_id, hdr.payload.data)
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] Wrote register 'MyIngress.content_cache' at index 1 with value 17334248032272856919049904129148938617700988014304292665051363529817104491524797347555222073430792320059939653561838142512049133114388715375014781493453850835185074611781570404847019710571613655373669594595135033889630776998479070814982991093682257016220976393663747692290960138236990461169158975424217495205235714645535325005531839232559780229597835373266260635303518876566160865710124377185704679970288330545603901891183133829188678302433295812412601508611578502040926066791030664212907508769521753768992941363800118204875972853288437881499254902667790476020116895095900119866747339270646056253520273313150781095936
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] switch.p4(107) Primitive hdr.payload.flag = 0
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Looking up key:
+
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] Action MyIngress.data_forward
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] Read register 'MyIngress.pit_table' at index 1 read value 0
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 0
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:58.791] [bmv2] [T] [thread 23615] [40.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Pipeline 'ingress': end
+[05:04:58.791] [bmv2] [D] [thread 23615] [40.0] [cxt 0] Egress port is 0
+[05:04:58.791] [bmv2] [D] [thread 23616] [40.0] [cxt 0] Pipeline 'egress': start
+[05:04:58.792] [bmv2] [D] [thread 23616] [40.0] [cxt 0] Pipeline 'egress': end
+[05:04:58.792] [bmv2] [D] [thread 23616] [40.0] [cxt 0] Deparser 'deparser': start
+[05:04:58.792] [bmv2] [D] [thread 23616] [40.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:58.792] [bmv2] [D] [thread 23616] [40.0] [cxt 0] Deparser 'deparser': end
+[05:04:58.792] [bmv2] [D] [thread 23620] [40.0] [cxt 0] Transmitting packet of size 203 out of port 0
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Processing packet received on port 2
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Parser 'parser': start
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Extracting header 'ethernet'
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Parser state 'start': key is 86dd
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] Bytes parsed: 14
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Parser 'parser': end
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Pipeline 'ingress': start
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Looking up key:
+
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] Action MyIngress.data_forward
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] Read register 'MyIngress.pit_table' at index 1 read value 0
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 0
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:04:59.596] [bmv2] [T] [thread 23615] [41.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Pipeline 'ingress': end
+[05:04:59.596] [bmv2] [D] [thread 23615] [41.0] [cxt 0] Egress port is 0
+[05:04:59.596] [bmv2] [D] [thread 23616] [41.0] [cxt 0] Pipeline 'egress': start
+[05:04:59.596] [bmv2] [D] [thread 23616] [41.0] [cxt 0] Pipeline 'egress': end
+[05:04:59.596] [bmv2] [D] [thread 23616] [41.0] [cxt 0] Deparser 'deparser': start
+[05:04:59.596] [bmv2] [D] [thread 23616] [41.0] [cxt 0] Deparsing header 'ethernet'
+[05:04:59.596] [bmv2] [D] [thread 23616] [41.0] [cxt 0] Deparser 'deparser': end
+[05:04:59.596] [bmv2] [D] [thread 23620] [41.0] [cxt 0] Transmitting packet of size 203 out of port 0
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Processing packet received on port 1
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Parser 'parser': start
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Extracting header 'ethernet'
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Parser state 'start': key is 86dd
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] Bytes parsed: 14
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Parser 'parser': end
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Pipeline 'ingress': start
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Looking up key:
+
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] Action MyIngress.data_forward
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] Read register 'MyIngress.pit_table' at index 1 read value 0
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 0
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:05:03.176] [bmv2] [T] [thread 23615] [42.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Pipeline 'ingress': end
+[05:05:03.176] [bmv2] [D] [thread 23615] [42.0] [cxt 0] Egress port is 0
+[05:05:03.176] [bmv2] [D] [thread 23616] [42.0] [cxt 0] Pipeline 'egress': start
+[05:05:03.176] [bmv2] [D] [thread 23616] [42.0] [cxt 0] Pipeline 'egress': end
+[05:05:03.176] [bmv2] [D] [thread 23616] [42.0] [cxt 0] Deparser 'deparser': start
+[05:05:03.176] [bmv2] [D] [thread 23616] [42.0] [cxt 0] Deparsing header 'ethernet'
+[05:05:03.176] [bmv2] [D] [thread 23616] [42.0] [cxt 0] Deparser 'deparser': end
+[05:05:03.176] [bmv2] [D] [thread 23620] [42.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Processing packet received on port 2
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Parser 'parser': start
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Extracting header 'ethernet'
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Parser state 'start': key is 86dd
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] Bytes parsed: 14
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Parser 'parser': end
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Pipeline 'ingress': start
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Looking up key:
+
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] Action MyIngress.data_forward
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] Read register 'MyIngress.pit_table' at index 1 read value 0
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 0
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:05:05.219] [bmv2] [T] [thread 23615] [43.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Pipeline 'ingress': end
+[05:05:05.219] [bmv2] [D] [thread 23615] [43.0] [cxt 0] Egress port is 0
+[05:05:05.219] [bmv2] [D] [thread 23616] [43.0] [cxt 0] Pipeline 'egress': start
+[05:05:05.219] [bmv2] [D] [thread 23616] [43.0] [cxt 0] Pipeline 'egress': end
+[05:05:05.219] [bmv2] [D] [thread 23616] [43.0] [cxt 0] Deparser 'deparser': start
+[05:05:05.219] [bmv2] [D] [thread 23616] [43.0] [cxt 0] Deparsing header 'ethernet'
+[05:05:05.219] [bmv2] [D] [thread 23616] [43.0] [cxt 0] Deparser 'deparser': end
+[05:05:05.219] [bmv2] [D] [thread 23620] [43.0] [cxt 0] Transmitting packet of size 70 out of port 0
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Processing packet received on port 2
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Parser 'parser': start
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Parser 'parser' entering state 'start'
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Extracting header 'ethernet'
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Parser state 'start': key is 86dd
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] Bytes parsed: 14
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Parser 'parser': end
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Pipeline 'ingress': start
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] switch.p4(147) Condition "hdr.icn.isValid()" (node_2) is false
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] switch.p4(164) Condition "hdr.payload.flag == 1" (node_13) is false
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] Applying table 'tbl_data_forward_0'
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Looking up key:
+
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Table 'tbl_data_forward_0': miss
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Action entry is MyIngress.data_forward - 
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] Action MyIngress.data_forward
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] switch.p4(97) Primitive pit_table.read(egress_port, hdr.payload.content_id)
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] Read register 'MyIngress.pit_table' at index 1 read value 0
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] switch.p4(98) Primitive standard_metadata.egress_spec = egress_port
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] switch.p4(99) Primitive pit_table.write(hdr.payload.content_id, 0)
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] Wrote register 'MyIngress.pit_table' at index 1 with value 0
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] switch.p4(100) Primitive hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] switch.p4(101) Primitive hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF
+[05:05:05.736] [bmv2] [T] [thread 23615] [44.0] [cxt 0] switch.p4(102) Primitive hdr.payload.ttl = hdr.payload.ttl - 1
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Pipeline 'ingress': end
+[05:05:05.736] [bmv2] [D] [thread 23615] [44.0] [cxt 0] Egress port is 0
+[05:05:05.738] [bmv2] [D] [thread 23616] [44.0] [cxt 0] Pipeline 'egress': start
+[05:05:05.738] [bmv2] [D] [thread 23616] [44.0] [cxt 0] Pipeline 'egress': end
+[05:05:05.738] [bmv2] [D] [thread 23616] [44.0] [cxt 0] Deparser 'deparser': start
+[05:05:05.738] [bmv2] [D] [thread 23616] [44.0] [cxt 0] Deparsing header 'ethernet'
+[05:05:05.738] [bmv2] [D] [thread 23616] [44.0] [cxt 0] Deparser 'deparser': end
+[05:05:05.738] [bmv2] [D] [thread 23620] [44.0] [cxt 0] Transmitting packet of size 70 out of port 0
+open: No such file or directory

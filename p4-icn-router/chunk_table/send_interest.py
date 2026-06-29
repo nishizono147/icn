@@ -28,7 +28,7 @@ def main():
     iface = get_if()
 
     pkt =  Ether(src=get_if_hwaddr(iface), dst='08:00:00:00:01:00', type=0x88B5)
-    pkt = pkt / icn(content_id=content_id, type = 0x11, hop_count=4, flag = 1) 
+    pkt = pkt / icn(content_id=content_id, type = 0x11, source_switch=0, flag = 1)
 
     pkt.show2()
 #    hexdump(pkt)

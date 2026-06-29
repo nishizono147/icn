@@ -13,7 +13,7 @@ class icn(Packet):
         #BitField("index", 0, 8),
         #BitField("src_router_id", 0, 16),
         BitField("flag", 0, 8),
-        BitField("hop_count", 0, 8),       # ホップカウント
+        BitField("source_switch", 0, 8),  # 0=producer, 1..3=s1..s3
     ]
 
 bind_layers(Ether, icn, type=0x88B5)  
