@@ -1,8 +1,9 @@
-"""UDP content request/response (aligned with pit_table ICN payload size)."""
+"""UDP content request/response aligned with chunk_table payload layout."""
 from scapy.all import BitField, Packet, StrFixedLenField, UDP, bind_layers
 
 REQUEST_PORT = 9999
 CLIENT_PORT = 50001
+CHUNK_SIZE = 256
 
 
 class udp_request(Packet):
@@ -16,17 +17,19 @@ class udp_request(Packet):
 
 
 class udp_response(Packet):
-    """Response: content_id + flag + 256B data (same as ICN payload)."""
+    """Response: matches chunk_table payload header + 256B data."""
     name = "udp_response"
     fields_desc = [
         BitField("content_id", 0, 32),
+        BitField("total_chunks", 0, 16),
+        BitField("chunk_id", 0, 16),
         BitField("flag", 0, 8),
-        StrFixedLenField("data", "", 256),
+        BitField("reserved", 0, 8),
+        StrFixedLenField("data", "", CHUNK_SIZE),
     ]
 
 
 bind_layers(UDP, udp_request, dport=REQUEST_PORT)
 bind_layers(UDP, udp_response, sport=REQUEST_PORT)
 
-REQUEST_LEN = 6  # bytes: 4 + 1 + 1
-RESPONSE_HDR_LEN = 5  # content_id + flag before data
+REQUEST_LEN = 6

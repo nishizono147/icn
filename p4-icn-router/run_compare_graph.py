@@ -247,6 +247,14 @@ def main():
         "--out-dir", default=os.path.join(ROOT, "results"),
         help="Directory for CSV and PNG output",
     )
+    parser.add_argument(
+        "--csv", default=None,
+        help="Output CSV path (default: OUT_DIR/compare_icn_ip.csv)",
+    )
+    parser.add_argument(
+        "--png", default=None,
+        help="Output PNG path (default: OUT_DIR/compare_icn_ip.png)",
+    )
     args = parser.parse_args()
 
     if args.report_sessions > args.sessions:
@@ -255,8 +263,8 @@ def main():
         parser.error("sessions - report-sessions must be even (symmetric trim)")
 
     os.makedirs(args.out_dir, exist_ok=True)
-    csv_path = os.path.join(args.out_dir, "compare_icn_ip.csv")
-    png_path = os.path.join(args.out_dir, "compare_icn_ip.png")
+    csv_path = args.csv or os.path.join(args.out_dir, "compare_icn_ip.csv")
+    png_path = args.png or os.path.join(args.out_dir, "compare_icn_ip.png")
 
     if args.plot_only:
         if not os.path.exists(csv_path):

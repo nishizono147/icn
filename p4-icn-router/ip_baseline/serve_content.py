@@ -16,13 +16,22 @@ CONTENT_IMAGE_MAP = {
     3: "image3.png",
 }
 
+# P4 register<bit<2048>> — one 256-byte word per content_id
+REGISTER_DATA_LEN = 256
 
-def read_image(path):
-    try:
-        with open(path, "rb") as f:
-            return f.read()
-    except FileNotFoundError:
-        return None
+CONTENT_CACHE = {}
+
+
+def load_content_cache():
+    """Load content into memory once at startup (like P4 content_cache.write)."""
+    cache = {}
+    for content_id, path in CONTENT_IMAGE_MAP.items():
+        try:
+            with open(path, "rb") as f:
+                cache[content_id] = f.read(REGISTER_DATA_LEN)
+        except FileNotFoundError:
+            print(f"File not found: {path}", file=sys.stderr)
+    return cache
 
 
 def get_if():
@@ -43,14 +52,9 @@ def handle_pkt(pkt, quiet=False):
         print(f"request content_id={content_id}")
         pkt.show2()
 
-    image_path = CONTENT_IMAGE_MAP.get(content_id)
-    if not image_path:
-        print(f"No image for content_id={content_id}", file=sys.stderr)
-        return
-
-    image_data = read_image(image_path)
+    image_data = CONTENT_CACHE.get(content_id)
     if not image_data:
-        print(f"Failed to read {image_path}", file=sys.stderr)
+        print(f"No cached content for content_id={content_id}", file=sys.stderr)
         return
 
     iface = get_if()
@@ -76,7 +80,13 @@ def main():
     )
     args = parser.parse_args()
 
+    global CONTENT_CACHE
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    CONTENT_CACHE = load_content_cache()
+    if not CONTENT_CACHE:
+        print("No content loaded into cache", file=sys.stderr)
+        sys.exit(1)
+
     ifaces = [i for i in os.listdir("/sys/class/net/") if "eth" in i]
     iface = ifaces[0]
     if not args.quiet:
