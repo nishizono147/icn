@@ -176,7 +176,42 @@ python3 benchmark_ip.py 1
 → **ICN 独自の利点**として別グラフ・別表で示す。
 IP の Warm 平均と直接比較しない（IP に中継キャッシュがないため）。
 
-### 報告例
+### 7.1 一括比較（`run_compare_graph.py`）
+
+ICN（`pit_table`）と IP を **52 Mininet セッション**ずつ実行し、
+両端 1 セッションずつを捨てて **中央 50 セッション**で平均・グラフ化する。
+
+**対等な比較条件（producer）**
+
+| 項目 | ICN (`send_content.py`) | IP (`serve_content.py`) |
+|------|-------------------------|-------------------------|
+| コンテンツ | 起動時にメモリへロード | 同左 |
+| sniff フィルタ | Interest のみ（`ether proto 0x88b5`） | Request のみ（`udp dst port 9999`） |
+| sniff | `store=False`（自送信応答を蓄積しない） | 同左 |
+| iface/MAC | 起動時にキャッシュ | 同左 |
+| 計測前ウォームアップ | **3 回**（非計測、間隔 0.05s） | **同左** |
+
+ウォームアップは Scapy `sniff()` 起動直後の数パケット遅延（IP で trial 3 が跳ねる原因）を
+**両方式で同じ手順**で除去するためのもの。計測 CSV には含めない。
+
+| 項目 | 値 |
+|------|-----|
+| セッション数（実行） | 52（ICN / IP 各 52） |
+| 統計に使うセッション | 中央 50（session 2〜51） |
+| producer ウォームアップ | 3 回（計測外） |
+| 1 セッション内試行（計測） | 10 回連続 |
+| 試行間隔 | 0.2 秒 |
+
+```bash
+cd p4-icn-router
+sudo env PATH=/home/p4/src/p4dev-python-venv/bin:$PATH \
+  PYTHONPATH=/home/p4/tutorials/utils \
+  python3 run_compare_graph.py
+```
+
+出力: `results/compare_icn_ip.csv`, `results/compare_icn_ip.png`
+
+---
 
 ```
 表1: Cold 取得時間（content_id=1）

@@ -20,6 +20,8 @@ CONTENT_IMAGE_MAP = {
 REGISTER_DATA_LEN = 256
 
 CONTENT_CACHE = {}
+IFACE = None
+IFACE_MAC = None
 
 
 def load_content_cache():
@@ -32,13 +34,6 @@ def load_content_cache():
         except FileNotFoundError:
             print(f"File not found: {path}", file=sys.stderr)
     return cache
-
-
-def get_if():
-    for iface in os.listdir("/sys/class/net/"):
-        if "eth" in iface:
-            return iface
-    sys.exit("no eth interface")
 
 
 def handle_pkt(pkt, quiet=False):
@@ -57,16 +52,15 @@ def handle_pkt(pkt, quiet=False):
         print(f"No cached content for content_id={content_id}", file=sys.stderr)
         return
 
-    iface = get_if()
     resp = (
-        Ether(src=get_if_hwaddr(iface), dst=H2_GATEWAY_MAC)
+        Ether(src=IFACE_MAC, dst=H2_GATEWAY_MAC)
         / IP(src=H2_IP, dst=pkt[IP].src)
         / UDP(sport=REQUEST_PORT, dport=pkt[UDP].sport)
         / udp_response(content_id=content_id, flag=1, data=image_data)
     )
     if not quiet:
         resp.show2()
-    sendp(resp, iface=iface, verbose=False)
+    sendp(resp, iface=IFACE, verbose=False)
     sys.stdout.flush()
 
 
@@ -80,7 +74,7 @@ def main():
     )
     args = parser.parse_args()
 
-    global CONTENT_CACHE
+    global CONTENT_CACHE, IFACE, IFACE_MAC
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     CONTENT_CACHE = load_content_cache()
     if not CONTENT_CACHE:
@@ -88,13 +82,15 @@ def main():
         sys.exit(1)
 
     ifaces = [i for i in os.listdir("/sys/class/net/") if "eth" in i]
-    iface = ifaces[0]
+    IFACE = ifaces[0]
+    IFACE_MAC = get_if_hwaddr(IFACE)
     if not args.quiet:
-        print(f"listening on {iface} UDP port {REQUEST_PORT}")
+        print(f"listening on {IFACE} UDP port {REQUEST_PORT}")
     sys.stdout.flush()
     sniff(
-        iface=iface,
-        filter=f"udp and port {REQUEST_PORT}",
+        iface=IFACE,
+        filter=f"udp dst port {REQUEST_PORT}",
+        store=False,
         prn=lambda p: handle_pkt(p, quiet=args.quiet),
     )
 

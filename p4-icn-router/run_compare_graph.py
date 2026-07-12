@@ -2,8 +2,10 @@
 """Run ICN (pit_table) vs IP baseline benchmarks and plot trial latency curves.
 
 Each session starts a fresh Mininet network so ICN trial 1 is always cold.
-By default 12 sessions are run per system; the first and last are discarded
-and statistics/plots use the middle 10 sessions.
+Both systems run identical producer warmup before measured trials so Scapy
+sniff startup does not bias IP trial 3.
+By default 52 sessions are run per system; the first and last are discarded
+and statistics/plots use the middle 50 sessions.
 """
 import argparse
 import csv
@@ -53,7 +55,7 @@ def parse_benchmark_output(text):
     return rows
 
 
-def run_one_session(project_dir, bench_cmd, producer_cmd, log_prefix):
+def run_one_session(project_dir, bench_cmd, producer_cmd, log_prefix, warmup_cmd=None):
     prev_cwd = os.getcwd()
     os.chdir(project_dir)
     switch_json = "build/switch.json"
@@ -78,6 +80,8 @@ def run_one_session(project_dir, bench_cmd, producer_cmd, log_prefix):
         h2 = net.get("h2")
         h2.cmd(f"{producer_cmd} > /tmp/{log_prefix}_producer.log 2>&1 &")
         time.sleep(0.5)
+        if warmup_cmd:
+            h1.cmd(f"{warmup_cmd} > /dev/null 2>&1")
         out = h1.cmd(bench_cmd)
         return parse_benchmark_output(out)
     finally:
@@ -85,9 +89,18 @@ def run_one_session(project_dir, bench_cmd, producer_cmd, log_prefix):
         os.chdir(prev_cwd)
 
 
-def collect_sessions(label, project_dir, sessions, trials, interval, content_id, producer_cmd, bench_script):
+def collect_sessions(
+    label, project_dir, sessions, trials, interval, content_id,
+    producer_cmd, bench_script, producer_warmup,
+):
     all_sessions = []
     bench_cmd = f"python3 {bench_script} {content_id} -n {trials} -i {interval}"
+    warmup_cmd = None
+    if producer_warmup > 0:
+        warmup_cmd = (
+            f"python3 {bench_script} {content_id} "
+            f"-n {producer_warmup} -i 0.05"
+        )
     for s in range(1, sessions + 1):
         print(f"\n=== {label} session {s}/{sessions} ===", flush=True)
         rows = run_one_session(
@@ -95,6 +108,7 @@ def collect_sessions(label, project_dir, sessions, trials, interval, content_id,
             bench_cmd,
             producer_cmd,
             log_prefix=f"{label.lower()}_s{s}",
+            warmup_cmd=warmup_cmd,
         )
         if len(rows) != trials:
             got = len(rows)
@@ -230,13 +244,17 @@ def main():
     parser = argparse.ArgumentParser(description="Compare ICN vs IP benchmark and plot.")
     parser.add_argument("--content-id", type=int, default=1)
     parser.add_argument("-n", "--trials", type=int, default=10)
-    parser.add_argument("-s", "--sessions", type=int, default=12,
-                        help="Mininet sessions to run per system (default: 12)")
+    parser.add_argument("-s", "--sessions", type=int, default=52,
+                        help="Mininet sessions to run per system (default: 52)")
     parser.add_argument(
-        "--report-sessions", type=int, default=10,
-        help="Use middle N sessions for graph/stats (default: 10, drops ends)",
+        "--report-sessions", type=int, default=50,
+        help="Use middle N sessions for graph/stats (default: 50, drops ends)",
     )
     parser.add_argument("-i", "--interval", type=float, default=0.2)
+    parser.add_argument(
+        "--producer-warmup", type=int, default=3,
+        help="Unmeasured requests per session to warm producer sniff (default: 3, ICN+IP)",
+    )
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument(
         "--plot-only",
@@ -300,10 +318,12 @@ def main():
     icn_sessions = collect_sessions(
         "ICN", PIT_DIR, args.sessions, args.trials, args.interval,
         args.content_id, "python3 send_content.py --quiet", "benchmark_icn.py",
+        args.producer_warmup,
     )
     ip_sessions = collect_sessions(
         "IP", IP_DIR, args.sessions, args.trials, args.interval,
         args.content_id, "python3 serve_content.py --quiet", "benchmark_ip.py",
+        args.producer_warmup,
     )
 
     icn_report, icn_used = select_report_sessions(

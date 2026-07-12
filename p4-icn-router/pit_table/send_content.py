@@ -8,6 +8,8 @@ from icn_header import icn
 from payload_header import payload
 from scapy.all import Ether, get_if_hwaddr, get_if_list, sendp, sniff
 
+INTEREST_ETHER_TYPE = 0x88B5
+
 CONTENT_IMAGE_MAP = {
     1: "image1.png",
     2: "image2.png",
@@ -18,6 +20,8 @@ CONTENT_IMAGE_MAP = {
 REGISTER_DATA_LEN = 256
 
 CONTENT_CACHE = {}
+IFACE = None
+IFACE_MAC = None
 
 
 def load_content_cache():
@@ -45,29 +49,29 @@ def get_if():
 
 
 def handle_pkt(packet, quiet=False):
-    if icn in packet:
-        if os.environ.get("BENCH_LOG"):
-            with open("/tmp/h2_interests.log", "a") as f:
-                f.write(f"{time.time()}\t{packet[icn].content_id}\n")
-        if not quiet:
-            print("got a packet")
-            packet.show2()
-        content_id = packet[icn].content_id
-        image_data = CONTENT_CACHE.get(content_id)
-        if not image_data:
-            print(f"No cached content for content_id: {content_id}")
-            return
+    if icn not in packet:
+        return
+    if os.environ.get("BENCH_LOG"):
+        with open("/tmp/h2_interests.log", "a") as f:
+            f.write(f"{time.time()}\t{packet[icn].content_id}\n")
+    if not quiet:
+        print("got a packet")
+        packet.show2()
+    content_id = packet[icn].content_id
+    image_data = CONTENT_CACHE.get(content_id)
+    if not image_data:
+        print(f"No cached content for content_id: {content_id}")
+        return
 
-        iface = get_if()
-        pkt = Ether(src=get_if_hwaddr(iface), dst=packet[Ether].src, type=0x88B6)
-        pkt = pkt / payload(
-            content_id=packet[icn].content_id, flag=1, ttl=8, data=image_data
-        )
+    pkt = Ether(src=IFACE_MAC, dst=packet[Ether].src, type=0x88B6)
+    pkt = pkt / payload(
+        content_id=packet[icn].content_id, flag=1, ttl=8, data=image_data
+    )
 
-        if not quiet:
-            pkt.show2()
-        sendp(pkt, iface=iface, verbose=False)
-        sys.stdout.flush()
+    if not quiet:
+        pkt.show2()
+    sendp(pkt, iface=IFACE, verbose=False)
+    sys.stdout.flush()
 
 
 def main():
@@ -80,19 +84,24 @@ def main():
     )
     args = parser.parse_args()
 
-    global CONTENT_CACHE
+    global CONTENT_CACHE, IFACE, IFACE_MAC
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     CONTENT_CACHE = load_content_cache()
     if not CONTENT_CACHE:
         print("No content loaded into cache", file=sys.stderr)
         sys.exit(1)
 
-    ifaces = [i for i in os.listdir("/sys/class/net/") if "eth" in i]
-    iface = ifaces[0]
+    IFACE = get_if()
+    IFACE_MAC = get_if_hwaddr(IFACE)
     if not args.quiet:
-        print("sniffing on %s" % iface)
+        print("sniffing on %s" % IFACE)
     sys.stdout.flush()
-    sniff(iface=iface, prn=lambda x: handle_pkt(x, quiet=args.quiet))
+    sniff(
+        iface=IFACE,
+        filter=f"ether proto 0x{INTEREST_ETHER_TYPE:04x}",
+        store=False,
+        prn=lambda x: handle_pkt(x, quiet=args.quiet),
+    )
 
 
 if __name__ == "__main__":
