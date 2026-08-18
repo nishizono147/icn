@@ -179,21 +179,25 @@ def plot_graph(out_path, trials, icn_mean, icn_std, ip_mean, ip_std, sessions):
 
     ax.plot(
         x, icn_mean, marker="o", linewidth=2,
-        label=f"ICN (pit_table, N={sessions} sessions)",
+        label="MCDベースICN(Data 1パケット)",
         color="#1f77b4",
     )
     ax.plot(
         x, ip_mean, marker="s", linewidth=2,
-        label=f"IP/UDP baseline (N={sessions} sessions)",
+        label="IP/UDP",
         color="#ff7f0e",
     )
 
-    ax.set_xlabel("要求回数")
-    ax.set_ylabel("コンテンツ取得時間 (ms)")
-    ax.set_title("ICN vs IP: End-to-end content retrieval latency")
+    ax.set_xlabel("要求回数", fontsize=20)
+    ax.set_ylabel("コンテンツ取得時間 (ms)", fontsize=20)
+    ax.set_title("ICN vs IP: コンテンツ取得時間比較", fontsize=22)
     ax.set_xticks(x)
+    ax.tick_params(axis="both", labelsize=18)
     ax.grid(True, alpha=0.3)
-    ax.legend(loc="upper right", fontsize=9)
+
+    data_ymax = max(max(icn_mean), max(ip_mean))
+    ax.set_ylim(0, data_ymax * 1.35)
+    ax.legend(loc="upper right", fontsize=18)
     fig.tight_layout()
     fig.savefig(out_path, dpi=150)
     plt.close(fig)
