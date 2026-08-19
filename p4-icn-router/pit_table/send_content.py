@@ -65,7 +65,11 @@ def handle_pkt(packet, quiet=False):
 
     pkt = Ether(src=IFACE_MAC, dst=packet[Ether].src, type=0x88B6)
     pkt = pkt / payload(
-        content_id=packet[icn].content_id, flag=1, ttl=8, data=image_data
+        content_id=packet[icn].content_id,
+        flag=1,
+        source_switch=0,
+        ttl=8,
+        data=image_data,
     )
 
     if not quiet:

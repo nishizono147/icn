@@ -51,7 +51,7 @@ def main():
     for trial in range(1, 11):
         h2.cmd("echo TRIAL_START >> /tmp/h2_interest.log")
         out = h1.cmd(f"python3 benchmark_icn.py 1 -n 1 -i 0 -t 5 2>&1")
-        m = re.search(r"1,cold,([\d.]+|),(\w+)", out.replace("warm", "cold"))
+        m = re.search(r"1,\w+,([\d.]+|),[^,]*,(timeout|\w+)", out)
         if not m:
             m = re.search(r"1,\w+,([\d.]+|),(\w+)", out)
         latency = m.group(1) if m else "?"

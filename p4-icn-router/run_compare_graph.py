@@ -47,8 +47,17 @@ def parse_benchmark_output(text):
         parts = line.split(",")
         if len(parts) < 4:
             continue
-        trial_s, _phase, lat_s, status = parts[0], parts[1], parts[2], parts[3]
-        if status != "ok" or not lat_s:
+        trial_s = parts[0]
+        status = parts[-1]
+        if status != "ok":
+            continue
+        # trial,phase,latency_ms,source_switch,status  or  trial,phase,latency_ms,status
+        lat_s = parts[2]
+        if not lat_s:
+            continue
+        try:
+            float(lat_s)
+        except ValueError:
             continue
         rows.append((int(trial_s), float(lat_s)))
     rows.sort(key=lambda x: x[0])

@@ -28,6 +28,7 @@ header ICNHeader {
 header payload_t {
     bit<32> content_id;
     bit<8> flag;
+    bit<8> source_switch;  // 0=producer, 1..3=s1..s3
     bit<8> ttl;
     bit<2048> data;
 }
@@ -87,6 +88,7 @@ control MyIngress(inout headers hdr,
                   inout standard_metadata_t standard_metadata) {
     register<bit<2048>>(1024) content_cache;
     register<bit<9>>(1024) pit_table;
+    register<bit<8>>(1) switch_id_reg;
 
     action drop() {
         mark_to_drop(standard_metadata);
@@ -102,6 +104,22 @@ control MyIngress(inout headers hdr,
         hdr.payload.ttl = hdr.payload.ttl - 1;
     }
 
+    action set_local_switch_id(bit<8> switch_id) {
+        switch_id_reg.write(0, switch_id);
+    }
+
+    table switch_config {
+        key = {
+            hdr.ethernet.etherType: exact;
+        }
+        actions = {
+            set_local_switch_id;
+            NoAction;
+        }
+        default_action = NoAction();
+        size = 4;
+    }
+
     action cache_content() {
         content_cache.write(hdr.payload.content_id, hdr.payload.data); //ここでキャッシュ
         hdr.payload.flag = 0;
@@ -109,10 +127,13 @@ control MyIngress(inout headers hdr,
 
     action return_content() {
         bit<2048> cached_data;
+        bit<8> sw_id;
         content_cache.read(cached_data, hdr.icn.content_id); //キャッシュ読み取り
+        switch_id_reg.read(sw_id, 0);
         hdr.payload.setValid();  //ペイロードを有効化
         hdr.payload.data = cached_data; //書き込み
         hdr.payload.content_id = hdr.icn.content_id;
+        hdr.payload.source_switch = sw_id;
         hdr.payload.ttl = 8;
         hdr.payload.flag = 1;
         hdr.ethernet.etherType = 0x88B6;
@@ -143,6 +164,8 @@ control MyIngress(inout headers hdr,
 
     apply {
         bit<2048> cached_data;
+
+        switch_config.apply();
 
         if (hdr.icn.isValid()) {                                   //Interestを受信したら
             content_cache.read(cached_data, hdr.icn.content_id);   //キャッシュがあるか確認

@@ -45,10 +45,14 @@ def parse_benchmark_output(text):
         if len(parts) == 3:
             trial_s, lat_s, status = parts[0], parts[1], parts[2]
         elif len(parts) >= 4:
-            trial_s, lat_s, status = parts[0], parts[2], parts[3]
+            trial_s, lat_s, status = parts[0], parts[1], parts[-1]
         else:
             continue
         if status != "ok" or not lat_s:
+            continue
+        try:
+            float(lat_s)
+        except ValueError:
             continue
         rows.append((int(trial_s), float(lat_s)))
     rows.sort(key=lambda x: x[0])
@@ -155,28 +159,66 @@ def save_csv(path, icn_sessions, ip_sessions, trials, icn_used, ip_used):
                     ])
 
 
-def plot_graph(out_path, trials, icn_mean, ip_mean, sessions):
+def plot_graph(out_path, trials, icn_mean, ip_mean, icn_std, ip_std, sessions):
     x = list(range(1, trials + 1))
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+    ax.fill_between(
+        x,
+        [a - b for a, b in zip(icn_mean, icn_std)],
+        [a + b for a, b in zip(icn_mean, icn_std)],
+        color="#1f77b4", alpha=0.15,
+    )
+    ax.fill_between(
+        x,
+        [a - b for a, b in zip(ip_mean, ip_std)],
+        [a + b for a, b in zip(ip_mean, ip_std)],
+        color="#ff7f0e", alpha=0.15,
+    )
     ax.plot(
-        x, icn_mean, marker="o", linewidth=2,
-        label=f"ICN (chunk_table, image4, N={sessions} sessions)",
+        x, icn_mean, marker="o", linewidth=2.5, markersize=7,
+        label=f"chunk_table ICN (N={sessions} sessions)",
         color="#1f77b4",
     )
     ax.plot(
-        x, ip_mean, marker="s", linewidth=2,
-        label=f"IP/UDP baseline (image4, N={sessions} sessions)",
+        x, ip_mean, marker="s", linewidth=2.5, markersize=7,
+        label=f"IP/UDP baseline (N={sessions} sessions)",
         color="#ff7f0e",
     )
+    for xi, yi in zip(x, icn_mean):
+        if yi == yi:
+            ax.annotate(
+                f"{yi:.1f}", (xi, yi), textcoords="offset points",
+                xytext=(0, 10), ha="center", fontsize=7, color="#1f77b4",
+            )
+    for xi, yi in zip(x, ip_mean):
+        if yi == yi:
+            ax.annotate(
+                f"{yi:.1f}", (xi, yi), textcoords="offset points",
+                xytext=(0, -14), ha="center", fontsize=7, color="#ff7f0e",
+            )
     ax.set_xlabel("要求回数")
     ax.set_ylabel("コンテンツ取得時間 (ms)")
     ax.set_title(
-        f"chunk_table vs IP: image4.png ({CHUNK_SIZE}B/chunk, 10 requests)"
+        f"chunk_table vs IP: image4 (256B/chunk, {trials} requests)",
+        fontweight="bold",
     )
     ax.set_xticks(x)
-    ax.grid(True, alpha=0.3)
+    ax.grid(True, alpha=0.35, linestyle="--")
     ax.legend(loc="upper right", fontsize=9)
-    fig.tight_layout()
+    icn_ok = [v for v in icn_mean if v == v]
+    ip_ok = [v for v in ip_mean if v == v]
+    if icn_ok and ip_ok:
+        faster = sum(
+            1 for a, b in zip(icn_mean, ip_mean) if a == a and b == b and a < b
+        )
+        fig.text(
+            0.5, 0.01,
+            f"全試行平均: ICN {statistics.mean(icn_ok):.1f} ms  /  "
+            f"IP {statistics.mean(ip_ok):.1f} ms"
+            f"  （ICN が速い要求回: {faster}/{trials}）",
+            ha="center", fontsize=9, style="italic",
+        )
+    fig.subplots_adjust(bottom=0.12)
     fig.savefig(out_path, dpi=150)
     plt.close(fig)
     print(f"Saved plot: {out_path}")
@@ -258,7 +300,10 @@ def main():
     print(f"Graph uses middle {args.report_sessions} sessions "
           f"(ICN: {icn_used}, IP: {ip_used})")
     print_summary(args.trials, icn_mean, icn_std, ip_mean, ip_std)
-    plot_graph(args.png, args.trials, icn_mean, ip_mean, args.report_sessions)
+    plot_graph(
+        args.png, args.trials, icn_mean, ip_mean, icn_std, ip_std,
+        args.report_sessions,
+    )
     return 0
 
 

@@ -5,6 +5,7 @@ class payload(Packet):
     fields_desc = [
         BitField("content_id", 0, 32),    # コンテンツID
         BitField("flag", 0, 8),
+        BitField("source_switch", 0, 8),  # 0=producer, 1..3=s1..s3
         BitField("ttl", 0, 8),
         StrFixedLenField("data", "", 256)
     ]

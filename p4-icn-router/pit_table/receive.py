@@ -32,14 +32,14 @@ def save_image(data, content_id):
         print(f"Failed to save image: {e}")
 
 def handle_pkt(pkt):
-    if payload in pkt :
-        print("got a packet")
-        pkt.show2()
+    if payload in pkt:
         content_id = pkt[payload].content_id
+        source_switch = pkt[payload].source_switch
+        print(
+            f"Got Data for content_id {content_id} (source_switch={source_switch})"
+        )
         image_data = bytes(pkt[payload].data)
         save_image(image_data, content_id)
-#        hexdump(pkt)
-#        print "len(pkt) = ", len(pkt)
         sys.stdout.flush()
 
 
