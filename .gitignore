@@ -26,6 +26,8 @@ build*/
 
 # Logs folders
 logs/
+# BMv2 / Mininet run logs (logs_ip_s1, logs_eval_s1, logs_icn_s1, ...)
+logs*/
 
 # Vagrant
 .vagrant/
