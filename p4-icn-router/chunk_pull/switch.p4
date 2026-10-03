@@ -76,7 +76,10 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
     register<bit<2048>>(10240) content_cache;
-    register<bit<9>>(1024) pit_table;
+    // PIT はチャンクごと（index = content_id * 10 + chunk_id）。
+    // content_id ごとに 1 つだと、Interest を複数まとめて送ったとき
+    // 最初の Data で消えてしまい、残りの Data の戻り先がわからなくなる
+    register<bit<9>>(10240) pit_table;
     register<bit<16>>(1024) total_chunks_reg;
     register<bit<8>>(1) switch_id_reg;
 
@@ -103,9 +106,10 @@ control MyIngress(inout headers hdr,
 
     action data_forward() {
         bit<9> egress_port;
-        pit_table.read(egress_port, hdr.payload.content_id);
+        bit<32> pit_index = (bit<32>)hdr.payload.content_id * 10 + (bit<32>)hdr.payload.chunk_id;
+        pit_table.read(egress_port, pit_index);
         standard_metadata.egress_spec = egress_port;
-        pit_table.write(hdr.payload.content_id, 0);
+        pit_table.write(pit_index, 0);
         hdr.ethernet.srcAddr = 0xFFFFFFFFFFFF;
         hdr.ethernet.dstAddr = 0xFFFFFFFFFFFF;
     }
@@ -171,7 +175,7 @@ control MyIngress(inout headers hdr,
                 bit<32> cid = hdr.icn.content_id;
                 bit<16> req_chunk = hdr.icn.chunk_id;
                 bit<8> edge_flag = hdr.icn.flag;
-                pit_table.write(cid, standard_metadata.ingress_port);
+                pit_table.write(req_index, standard_metadata.ingress_port);
                 serve_cached_chunk(req_chunk, cid);
                 data_forward();
                 if (edge_flag != 1) {
@@ -179,7 +183,7 @@ control MyIngress(inout headers hdr,
                 }
             } else {
                 hdr.icn.flag = 0;
-                pit_table.write(hdr.icn.content_id, standard_metadata.ingress_port);
+                pit_table.write(req_index, standard_metadata.ingress_port);
                 foward_interest.apply();
             }
         } else if (hdr.payload.isValid()) {

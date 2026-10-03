@@ -1,0 +1,11 @@
+system,trial,mean_ms,std_ms,n
+pull-sequential,1,12.5441,0.2220,10
+pull-sequential,2,11.5493,0.3630,10
+pull-sequential,3,7.2078,0.3177,10
+pull-sequential,4,2.8788,0.1134,10
+pull-sequential,5,2.9298,0.1924,10
+pull-sequential,6,2.8749,0.1443,10
+pull-sequential,7,2.9025,0.1992,10
+pull-sequential,8,2.8723,0.0940,10
+pull-sequential,9,2.8367,0.0944,10
+pull-sequential,10,2.8280,0.1447,10
