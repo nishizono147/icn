@@ -24,7 +24,10 @@ sys.path.insert(0, os.path.join(ROOT, "..", "utils"))
 from run_exercise import ExerciseRunner  # noqa: E402
 
 CONSUMER = os.path.join(ROOT, "consumer_bench.py")
-CONTENT_FILES = {4: os.path.join(ROOT, "chunk_table", "image4.png")}
+CONTENT_FILES = {
+    4: os.path.join(ROOT, "chunk_table", "image4.png"),      # 4 チャンク
+    6: os.path.join(ROOT, "chunk_table", "content10.bin"),   # 10 チャンク
+}
 
 SYSTEMS = {
     "table": {

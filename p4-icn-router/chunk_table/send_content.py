@@ -22,6 +22,7 @@ CONTENT_IMAGE_MAP = {
     3: "image3.png",
     4: "image4.png",
     5: "image5.png",
+    6: "content10.bin",  # 256 B x 10 チャンクの計測用（乱数、seed=10）
 }
 
 CHUNK_SIZE = 256
