@@ -112,6 +112,8 @@ python3 plot_compare_chunk_methods.py \
 
 ## 今後の予定
 
+詳細は [ROADMAP.md](ROADMAP.md)。
+
 1. コンテンツ名（各階層をハッシュで固定長にして並べる。例: 32 bit × 4 階層 = 128 bit）
 2. FIB（名前の最長プレフィックス一致 → 次の IWP）と NMT（IWP → 出力ポート）。
    今の Interest の転送は送信元 MAC アドレスで経路を決め打ちしている
