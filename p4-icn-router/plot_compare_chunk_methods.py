@@ -70,7 +70,7 @@ def main():
             path = os.path.join(ROOT, path)
         panels.append((title, *load(path, systems)))
 
-    fig, axes = plt.subplots(1, len(panels), figsize=(5.6 * len(panels), 4.8),
+    fig, axes = plt.subplots(1, len(panels), figsize=(max(5.6 * len(panels), 9.0), 4.8),
                              sharey=True, squeeze=False)
     fig.patch.set_facecolor(SURFACE)
     ymax = 0.0
