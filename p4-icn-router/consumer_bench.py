@@ -11,9 +11,17 @@
 Data は AF_PACKET ソケットで直接受け取り、Interest は事前に組み立てたバイト列を送る。
 pcap ファイルの読み直しや Scapy の送信処理がチャンクの間に入らないようにするため。
 
-取得時間は試行がすべて終わった後に tcpdump の pcap 時刻から計算する。
-  開始: その試行の最初の Interest が h1 から出た時刻
-  終了: 全チャンクがそろった時刻（最後に届いた未受信チャンクの Data の時刻）
+取得時間は試行がすべて終わった後に計算する。
+  開始（--start-time で選ぶ）:
+    pcap   : その試行の最初の Interest が h1 から出た時刻（tcpdump の pcap 時刻）。既定
+    script : その試行の最初の Interest を送る直前に、このスクリプトが記録した時刻（time.time()）
+  終了: 全チャンクがそろった時刻（最後に届いた未受信チャンクの Data の、tcpdump の pcap 時刻）
+
+h1 のリンクに遅延（tc netem）を付けるときは script を使う。tcpdump は送信パケットを遅延を
+かけた後に記録するので、pcap では開始が遅延の分だけ遅く記録されるため。
+参考として、pcap 時刻だけで計算した取得時間（latency_pcap_ms）と、
+pcap の最初の Interest の時刻 − 記録した送信時刻（send_offset_ms）も出力する。
+send_offset_ms は、遅延なしではほぼ 0、h1 のリンクに片道 d の遅延があれば約 d になる。
 """
 import argparse
 import os
@@ -41,7 +49,7 @@ DATA_PAYLOAD_OFFSET = DATA_HDR_OFFSET + DATA_HDR.size
 SOURCE_NAMES = {0: "h2", 1: "s1", 2: "s2", 3: "s3"}
 
 RESULT_FIELDS = [
-    "trial", "latency_ms", "interests", "chunks", "sources",
+    "trial", "latency_ms", "latency_pcap_ms", "send_offset_ms", "interests", "chunks", "sources",
     "max_gap_ms", "verified", "status",
 ]
 
@@ -183,6 +191,8 @@ def analyze_pcap(packets, mode, content_id):
             if before:
                 gaps.append((its - max(before)) * 1000.0)
         results.append({
+            "start": t["start"],
+            "end": end,
             "latency_ms": None if end is None else (end - t["start"]) * 1000.0,
             "interests": len(t["interests"]),
             "chunks": len(first_seen),
@@ -201,12 +211,14 @@ def drain(sock):
 
 
 def fetch_once(mode, strategy, content_id, rx, tx, interests, timeout):
-    """1 試行分の取得。受信したチャンク {chunk_id: data} と送った Interest の数を返す。"""
+    """1 試行分の取得。受信したチャンク {chunk_id: data}、送った Interest の数、
+    最初の Interest を送る直前の時刻を返す。"""
     received = {}
     total = None
     sent = 1
     next_chunk = 1  # sequential で次に要求するチャンク
     burst_done = False
+    send_time = time.time()
     tx.send(interests[0])
     deadline = time.monotonic() + timeout
 
@@ -238,7 +250,7 @@ def fetch_once(mode, strategy, content_id, rx, tx, interests, timeout):
                 tx.send(interests[next_chunk])
                 sent += 1
                 next_chunk += 1
-    return received, total, sent
+    return received, total, sent, send_time
 
 
 def verify(received, total, expected):
@@ -270,18 +282,18 @@ def run(args):
 
     label = args.mode if args.mode == "table" else f"pull-{args.pull_strategy}"
     print(f"# mode={label} content_id={args.content_id} trials={args.trials} "
-          f"interval={args.interval}s iface={iface}", flush=True)
+          f"interval={args.interval}s iface={iface} start_time={args.start_time}", flush=True)
 
     tcpdump = start_tcpdump(iface, args.pcap)
     script_side = []
     try:
         for trial in range(1, args.trials + 1):
             drain(rx)
-            received, total, sent = fetch_once(
+            received, total, sent, send_time = fetch_once(
                 args.mode, args.pull_strategy, args.content_id, rx, tx, interests, args.timeout,
             )
             complete = total is not None and len(received) == total
-            script_side.append((complete, sent, verify(received, total, expected)))
+            script_side.append((complete, sent, verify(received, total, expected), send_time))
             if not args.quiet:
                 state = "ok" if complete else f"timeout ({len(received)}/{total} chunks)"
                 print(f"# trial {trial}: {state}", flush=True)
@@ -300,18 +312,24 @@ def run(args):
     print("RESULT," + ",".join(RESULT_FIELDS), flush=True)
     latencies = []
     for i in range(args.trials):
-        complete, sent, verified = script_side[i]
+        complete, sent, verified, send_time = script_side[i]
         p = pcap_results[i] if i < len(pcap_results) else None
-        if p is None or not complete or p["latency_ms"] is None:
+        offset = "" if p is None else f"{(p['start'] - send_time) * 1000.0:.3f}"
+        if p is None or not complete or p["end"] is None:
             status = "timeout"
-            latency = ""
+            latency = latency_pcap = ""
         else:
             status = "ok"
-            latency = f"{p['latency_ms']:.3f}"
-            latencies.append(p["latency_ms"])
+            start = send_time if args.start_time == "script" else p["start"]
+            latency_ms = (p["end"] - start) * 1000.0
+            latency = f"{latency_ms:.3f}"
+            latency_pcap = f"{p['latency_ms']:.3f}"
+            latencies.append(latency_ms)
         row = [
             str(i + 1),
             latency,
+            latency_pcap,
+            offset,
             str(p["interests"] if p else sent),
             str(p["chunks"] if p else 0),
             ";".join(SOURCE_NAMES.get(s, str(s)) for s in p["sources"]) if p else "",
@@ -338,6 +356,9 @@ def main():
     parser.add_argument("-t", "--timeout", type=float, default=5.0, help="1 試行のタイムアウト（秒）")
     parser.add_argument("--pcap", default="/tmp/consumer_bench.pcap")
     parser.add_argument("--expect-file", help="受信内容を照合する元ファイル")
+    parser.add_argument("--start-time", choices=["pcap", "script"], default="pcap",
+                        help="取得時間の開始: pcap = tcpdump の Interest の時刻、"
+                             "script = 送信直前に記録した時刻（h1 のリンクに遅延を付けるとき）")
     parser.add_argument("-q", "--quiet", action="store_true")
     sys.exit(run(parser.parse_args()))
 

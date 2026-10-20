@@ -8,11 +8,18 @@
 各試行で Data がどこから返ってきたか（source_switch）を記録し、MCD のキャッシュ移動
 （1 回目 h2 → 2 回目 s3 → 3 回目 s2 → 4 回目以降 s1）と一致するかを確認する。
 
+--link-delay を指定すると、全リンクに片道その遅延（Mininet の TCLink = tc netem）を付ける。
+各方式の topology.json は書き換えず、遅延を書き足したものを作業フォルダに作って使う。
+取得時間の開始は、遅延なしでは tcpdump の Interest の時刻、遅延ありでは Consumer が送信直前に
+記録した時刻にする（tcpdump は h1 の送信パケットを遅延をかけた後に記録するため）。
+
 コンテナ内で root として実行する:
   python3 run_compare_chunk_methods.py -s 10 --systems table,pull-sequential,pull-burst
+  python3 run_compare_chunk_methods.py -s 20 --content-id 6 --link-delay 10ms
 """
 import argparse
 import csv
+import json
 import os
 import statistics
 import subprocess
@@ -71,6 +78,20 @@ def parse_results(text):
     return rows
 
 
+def topology_file(project, tag, args, work_dir):
+    """使う topology.json のパス。--link-delay があれば、全リンクに遅延を書き足したものを作る。"""
+    if not args.link_delay:
+        return "topology.json"
+    with open(os.path.join(project, "topology.json")) as f:
+        topo = json.load(f)
+    # リンクは [node1, node2, latency, bandwidth]（latency と bandwidth は省略可）
+    topo["links"] = [[link[0], link[1], args.link_delay] + link[3:] for link in topo["links"]]
+    path = os.path.join(work_dir, f"{tag}_topology.json")
+    with open(path, "w") as f:
+        json.dump(topo, f, indent=2)
+    return path
+
+
 def run_session(system, session, args, work_dir):
     cfg = SYSTEMS[system]
     project = os.path.join(ROOT, cfg["dir"])
@@ -82,7 +103,7 @@ def run_session(system, session, args, work_dir):
     prev_cwd = os.getcwd()
     os.chdir(project)
     runner = ExerciseRunner(
-        "topology.json", log_dir, pcap_dir, "build/switch.json",
+        topology_file(project, tag, args, work_dir), log_dir, pcap_dir, "build/switch.json",
         bmv2_exe="simple_switch_grpc", quiet=True,
     )
     runner.create_network()
@@ -100,6 +121,7 @@ def run_session(system, session, args, work_dir):
         cmd = (
             f"python3 {CONSUMER} {args.content_id} {cfg['consumer_args']} "
             f"-n {args.trials} -i {args.interval} -q "
+            f"--start-time {'script' if args.link_delay else 'pcap'} "
             f"--pcap {work_dir}/{tag}.pcap"
             + (f" --expect-file {expect}" if expect else "")
         )
@@ -142,6 +164,8 @@ def main():
     parser.add_argument("--systems", default="table,pull-burst",
                         help="カンマ区切り: " + ", ".join(SYSTEMS))
     parser.add_argument("--producer-wait", type=float, default=2.5)
+    parser.add_argument("--link-delay", default="",
+                        help="全リンクに付ける片道の遅延（例: 10ms）。省略すると遅延なし")
     parser.add_argument("--work-dir", default="/tmp/compare_chunk_methods",
                         help="BMv2 のログ・pcap・各セッションの出力の置き場所")
     parser.add_argument("--out-prefix", default=os.path.join(ROOT, "results", "compare_chunk_methods"))
@@ -168,7 +192,8 @@ def main():
             if len(results) != args.trials:
                 print(f"  WARNING: 結果が {len(results)} 試行分しかない", flush=True)
             for r in results:
-                r.update({"system": system, "session": session,
+                r.update({"system": system, "session": session, "link_delay": args.link_delay or "0ms",
+                          "start_time": "script" if args.link_delay else "pcap",
                           "expected_source": expected_source(int(r["trial"]))})
                 rows.append(r)
             ok = [float(r["latency_ms"]) for r in results if r["status"] == "ok"]
@@ -179,7 +204,8 @@ def main():
 
     os.makedirs(os.path.dirname(args.out_prefix), exist_ok=True)
     raw_path = args.out_prefix + "_raw.csv"
-    fields = ["system", "session", "trial", "latency_ms", "status", "interests", "chunks",
+    fields = ["system", "session", "trial", "link_delay", "start_time", "latency_ms", "latency_pcap_ms",
+              "send_offset_ms", "status", "interests", "chunks",
               "sources", "expected_source", "max_gap_ms", "verified"]
     with open(raw_path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
@@ -214,10 +240,15 @@ def main():
                         and set(r["sources"].split(";")) != {r["expected_source"]}]
         not_verified = [r for r in rs if r["status"] == "ok" and r.get("verified") not in ("yes", "-")]
         gaps = [float(r["max_gap_ms"]) for r in rs if r.get("max_gap_ms")]
+        offsets = [float(r["send_offset_ms"]) for r in rs if r.get("send_offset_ms")]
         print(f"{s}: 試行 {len(rs)}, 失敗 {len(failed)}, "
               f"返す場所が想定と違う {len(src_mismatch)}, 内容不一致 {len(not_verified)}"
               + (f", チャンク間の空き 最大 {max(gaps):.3f} ms / 平均 {statistics.mean(gaps):.3f} ms"
                  if gaps else ""))
+        if offsets:
+            # pcap の最初の Interest の時刻 − Consumer が記録した送信時刻。遅延なしでほぼ 0、h1 のリンクに片道 d なら約 d
+            print(f"  送信時刻のずれ（pcap − 記録）: 平均 {statistics.mean(offsets):.3f} ms, "
+                  f"最小 {min(offsets):.3f} ms, 最大 {max(offsets):.3f} ms")
         for r in src_mismatch[:5]:
             print(f"  session {r['session']} trial {r['trial']}: "
                   f"sources={r['sources']} expected={r['expected_source']}")
