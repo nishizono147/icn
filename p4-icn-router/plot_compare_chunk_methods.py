@@ -30,9 +30,10 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 # 色は役割で固定（方式ごと。パネルが変わっても同じ方式は同じ色）
 SERIES = {
     "table": {"label": "chunk_table（Interest 1 本）", "color": "#2a78d6", "marker": "o"},
-    "pull-burst": {"label": "chunk_pull（残りをまとめて送る）", "color": "#eb6834", "marker": "s"},
-    "pull-sequential": {"label": "chunk_pull（1 つずつ送る）", "color": "#1baf7a", "marker": "^"},
+    "pull": {"label": "chunk_pull（チャンクごとに Interest）", "color": "#eb6834", "marker": "s"},
 }
+# 以前の CSV では pull を pull-burst と書いている
+OLD_NAMES = {"pull-burst": "pull"}
 TEXT = "#0b0b0b"
 TEXT_SECONDARY = "#52514e"
 MUTED = "#898781"
@@ -46,10 +47,11 @@ def load(path, systems):
     source = {}
     with open(path) as f:
         for r in csv.DictReader(f):
-            if r["system"] not in systems or r["status"] != "ok":
+            system = OLD_NAMES.get(r["system"], r["system"])
+            if system not in systems or r["status"] != "ok":
                 continue
             t = int(r["trial"])
-            data[r["system"]][t].append(float(r["latency_ms"]))
+            data[system][t].append(float(r["latency_ms"]))
             source[t] = r["expected_source"]
     return data, source
 
@@ -58,7 +60,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--panel", action="append", required=True,
                         help="'見出し:raw.csv のパス'（複数指定でパネルを横に並べる）")
-    parser.add_argument("--systems", default="table,pull-burst")
+    parser.add_argument("--systems", default="table,pull")
     parser.add_argument("--out", default=os.path.join(ROOT, "results", "png", "compare_chunk_methods.png"))
     args = parser.parse_args()
 

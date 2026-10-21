@@ -85,6 +85,9 @@ def first_times(packets, mode, t0, t1, kind):
 
 def load_trial(work_dir, system, session, trial):
     mode = "table" if system == "table" else "pull"
+    # 以前の計測では pull を pull-burst という名前で保存している
+    if system == "pull" and not os.path.exists(os.path.join(work_dir, f"pull_s{session}.pcap")):
+        system = "pull-burst"
     h1 = read_pcap(os.path.join(work_dir, f"{system}_s{session}.pcap"))
     starts = []
     for ts, fr in h1:
@@ -206,7 +209,7 @@ def main():
     where = SOURCE.get(args.trial, "s1")
     ymax = {"h2": 3, "s3": 3, "s2": 2, "s1": 1}[where]
     t_tab, total_t = load_trial(args.work_dir, "table", args.session, args.trial)
-    t_pul, total_p = load_trial(args.work_dir, "pull-burst", args.session, args.trial)
+    t_pul, total_p = load_trial(args.work_dir, "pull", args.session, args.trial)
     xmax = max(total_t, total_p) * 1.06
 
     fig, axes = plt.subplots(2, 1, figsize=(10, 2.2 + 1.3 * (ymax + 1)), sharex=True)

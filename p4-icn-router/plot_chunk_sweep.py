@@ -5,7 +5,7 @@
 s1 から返すのは 4〜10 回目なので、セッションごとにその平均を 1 つの値とする。
 点はセッション間の平均。方式ごとに 1 つのパネルを並べる。
 
-  python3 plot_chunk_sweep.py results/csv/chunk_sweep_pull_raw.csv --systems pull-burst \\
+  python3 plot_chunk_sweep.py results/csv/chunk_sweep_pull_raw.csv --systems pull \\
       --out results/png/chunk_sweep_pull.png
 """
 import argparse
@@ -28,14 +28,14 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 
 SYSTEM_TITLE = {
     "table": "chunk_table（Interest 1 本）",
-    "pull-burst": "chunk_pull（残りをまとめて送る）",
-    "pull-sequential": "chunk_pull（1 つずつ送る）",
+    "pull": "chunk_pull（チャンクごとに Interest）",
 }
+# 以前の CSV では pull を pull-burst と書いている
+OLD_NAMES = {"pull-burst": "pull"}
 # 返す場所は遠さの順なので、方式の色（plot_compare_chunk_methods.py と同じ）の濃さで表す。遠いほど濃い
 RAMP = {
     "table": ["#123c70", "#1d5aa6", "#2a78d6", "#6fa5e6"],
-    "pull-burst": ["#8a3412", "#c24e1f", "#eb6834", "#f29a6c"],
-    "pull-sequential": ["#0b5c3f", "#13865b", "#1baf7a", "#6cc9a4"],
+    "pull": ["#8a3412", "#c24e1f", "#eb6834", "#f29a6c"],
 }
 LOCATIONS = ["h2", "s3", "s2", "s1"]
 LOCATION_LABEL = {"h2": "h2（Producer）", "s3": "s3", "s2": "s2", "s1": "s1（Consumer の隣）"}
@@ -52,9 +52,10 @@ def load(path, systems):
     per_session = defaultdict(list)  # (system, location, n, session) -> [latency_ms]
     with open(path) as f:
         for r in csv.DictReader(f):
-            if r["system"] not in systems or r["status"] != "ok":
+            system = OLD_NAMES.get(r["system"], r["system"])
+            if system not in systems or r["status"] != "ok":
                 continue
-            key = (r["system"], r["expected_source"], int(r["n_chunks"]), int(r["session"]))
+            key = (system, r["expected_source"], int(r["n_chunks"]), int(r["session"]))
             per_session[key].append(float(r["latency_ms"]))
     data = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     for (system, loc, n, _session), vals in per_session.items():
@@ -65,7 +66,7 @@ def load(path, systems):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("raw_csv")
-    parser.add_argument("--systems", default="pull-burst", help="カンマ区切り。方式ごとに 1 パネル")
+    parser.add_argument("--systems", default="pull", help="カンマ区切り。方式ごとに 1 パネル")
     parser.add_argument("--title", default="")
     parser.add_argument("--out", default=os.path.join(ROOT, "results", "png", "chunk_sweep.png"))
     args = parser.parse_args()

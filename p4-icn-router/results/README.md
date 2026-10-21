@@ -14,6 +14,10 @@
 
 計測の方法、CSV の列の意味、実験のコマンドは [../README.md](../README.md) を参照。主な数値もそちらにまとめている。
 
+方式の名前は `table` と `pull` の 2 つ。ここにある CSV の `system` の列では、`pull` を `pull-burst` と書いている
+（名前を変える前に測ったため。グラフのスクリプトはどちらの名前でも読める）。
+`pull-sequential` は、前のチャンクが届いてから次の Interest を 1 つずつ送る方式で、使わないので削除した。
+
 ## コンテンツの番号（content_id）
 
 chunk_table と chunk_pull の `content_id` の割り当ては 2026-10-21 に変えた。
@@ -35,12 +39,12 @@ chunk_table と chunk_pull の `content_id` の割り当ては 2026-10-21 に変
 
 | 名前 | 計測した日 | 方式 | コンテンツ | リンクの遅延 | セッション | グラフ |
 |---|---|---|---|---|---|---|
-| `compare_chunk_methods` | 2026-10-03 | table、pull-sequential、pull-burst | 旧 4（4 チャンク） | なし | 20 | `compare_chunk_methods.png`（左） |
-| `compare_chunk_methods_c10` | 2026-10-08 | table、pull-burst | 旧 6（10 チャンク） | なし | 20 | `compare_chunk_methods.png`（右） |
-| `compare_chunk_methods_c10_run2` | 2026-10-09 | table、pull-burst | 旧 6（10 チャンク） | なし | 20 | `compare_chunk_methods_c10_run2.png` |
-| `my_c10` | 2026-10-16 | table、pull-burst | 旧 6（10 チャンク） | なし | 20 | `my_c10.png`（手動で実行した分） |
-| `compare_chunk_methods_delay5ms` | 2026-10-21 | table、pull-burst | 旧 6（10 チャンク） | 全リンク片道 5 ms | 20 | `compare_chunk_methods_delay5ms.png` |
-| `compare_chunk_methods_delay10ms` | 2026-10-20 | table、pull-burst | 旧 6（10 チャンク） | 全リンク片道 10 ms | 20 | `compare_chunk_methods_delay10ms.png` |
+| `compare_chunk_methods` | 2026-10-03 | table、pull、pull-sequential | 旧 4（4 チャンク） | なし | 20 | `compare_chunk_methods.png`（左） |
+| `compare_chunk_methods_c10` | 2026-10-08 | table、pull | 旧 6（10 チャンク） | なし | 20 | `compare_chunk_methods.png`（右） |
+| `compare_chunk_methods_c10_run2` | 2026-10-09 | table、pull | 旧 6（10 チャンク） | なし | 20 | `compare_chunk_methods_c10_run2.png` |
+| `my_c10` | 2026-10-16 | table、pull | 旧 6（10 チャンク） | なし | 20 | `my_c10.png`（手動で実行した分） |
+| `compare_chunk_methods_delay5ms` | 2026-10-21 | table、pull | 旧 6（10 チャンク） | 全リンク片道 5 ms | 20 | `compare_chunk_methods_delay5ms.png` |
+| `compare_chunk_methods_delay10ms` | 2026-10-20 | table、pull | 旧 6（10 チャンク） | 全リンク片道 10 ms | 20 | `compare_chunk_methods_delay10ms.png` |
 | `compare_chunk_methods_step1` | 2026-10-03 | table、pull-sequential | 旧 4（4 チャンク） | なし | 10 | なし（chunk_pull の PIT をチャンクごとに分ける前の確認） |
 | `compare_chunk_methods_step2` | 2026-10-03 | pull-sequential | 旧 4（4 チャンク） | なし | 10 | なし（分けた後の確認） |
 
@@ -53,7 +57,7 @@ chunk_table と chunk_pull の `content_id` の割り当ては 2026-10-21 に変
 
 | 名前 | 計測した日 | 方式 | コンテンツ | リンクの遅延 | セッション | グラフ |
 |---|---|---|---|---|---|---|
-| `chunk_sweep_pull` | 2026-10-21 | pull-burst | `content1〜10.bin` | なし | 20 | `chunk_sweep_pull.png` |
+| `chunk_sweep_pull` | 2026-10-21 | pull | `content1〜10.bin` | なし | 20 | `chunk_sweep_pull.png` |
 
 グラフの s1 の点は、セッションごとに 4〜10 回目（s1 から返る 7 回）を平均し、それを 20 セッション分平均した値。
 
@@ -103,7 +107,7 @@ done
 
 # チャンク数の比較
 python3 plot_chunk_sweep.py results/csv/chunk_sweep_pull_raw.csv \
-    --systems pull-burst --out results/png/chunk_sweep_pull.png
+    --systems pull --out results/png/chunk_sweep_pull.png
 ```
 
 グラフは平均の線だけを描く（標準偏差は `*_summary.csv` の `std_ms` にある）。

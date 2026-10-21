@@ -18,10 +18,13 @@ index = content_id * 10 + chunk_id）が別なので、前のコンテンツの�
 取得時間の開始は、遅延なしでは tcpdump の Interest の時刻、遅延ありでは Consumer が送信直前に
 記録した時刻にする（tcpdump は h1 の送信パケットを遅延をかけた後に記録するため）。
 
-コンテナ内で root として実行する:
-  python3 run_compare_chunk_methods.py -s 10 --systems table,pull-sequential,pull-burst
+root で実行する（root でなければ sudo PATH=$PATH を前に付ける）:
+  python3 run_compare_chunk_methods.py -s 20 --content-id 10
   python3 run_compare_chunk_methods.py -s 20 --content-id 10 --link-delay 10ms
-  python3 run_compare_chunk_methods.py -s 20 --content-id 1,2,3,4,5,6,7,8,9,10 --systems pull-burst
+  python3 run_compare_chunk_methods.py -s 20 --content-id 1,2,3,4,5,6,7,8,9,10 --systems pull
+
+以前の結果では、pull を pull-burst（残りの Interest をまとめて送る）と呼んでいた。
+1 つずつ送る pull-sequential もあったが、使わないので削除した。
 """
 import argparse
 import csv
@@ -45,13 +48,9 @@ SYSTEMS = {
         "dir": "chunk_table",
         "consumer_args": "--mode table",
     },
-    "pull-sequential": {
+    "pull": {
         "dir": "chunk_pull",
-        "consumer_args": "--mode pull --pull-strategy sequential",
-    },
-    "pull-burst": {
-        "dir": "chunk_pull",
-        "consumer_args": "--mode pull --pull-strategy burst",
+        "consumer_args": "--mode pull",
     },
 }
 PRODUCER = "python3 send_content.py --quiet"
@@ -181,7 +180,7 @@ def main():
     parser.add_argument("-i", "--interval", type=float, default=0.2)
     parser.add_argument("--content-id", default="4",
                         help="コンテンツ ID（N = contentN.bin、N チャンク）。カンマ区切りで複数指定できる")
-    parser.add_argument("--systems", default="table,pull-burst",
+    parser.add_argument("--systems", default="table,pull",
                         help="カンマ区切り: " + ", ".join(SYSTEMS))
     parser.add_argument("--producer-wait", type=float, default=2.5)
     parser.add_argument("--link-delay", default="",

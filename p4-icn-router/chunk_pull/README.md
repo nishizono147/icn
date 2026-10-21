@@ -12,7 +12,7 @@ Consumer（h1）                         キャッシュを持つスイッチ / 
    │ Interest(chunk 0) ─────────────────────▶│
    │◀──────────────────── Data chunk 0       │  total_chunks で全チャンク数 N を知る
    │ Interest(chunk 1) ─────────────────────▶│
-   │ Interest(chunk 2) ─────────────────────▶│  burst: 残りをまとめて送る
+   │ Interest(chunk 2) ─────────────────────▶│  残りをまとめて送る
    │ …                                       │
    │◀──────────────────── Data chunk 1       │
    │◀──────────────────── Data chunk 2 …     │
@@ -20,9 +20,7 @@ Consumer（h1）                         キャッシュを持つスイッチ / 
 
 1. Consumer が `Interest(content_id, chunk_id = 0)` を送る
 2. 返ってきた Data の `total_chunks` で全チャンク数 N を知る
-3. `Interest(chunk_id = 1 〜 N-1)` を送る
-   - **burst**（まとめて送る）: chunk 0 が届いたら残りを一度に送る。計測ではこちらを使う
-   - **sequential**（1 つずつ送る）: 前のチャンクが届いてから次を送る
+3. chunk 0 が届いたら、`Interest(chunk_id = 1 〜 N-1)` をまとめて送る
 4. Consumer 側でチャンクをつなげて元のコンテンツに戻す
 
 chunk_table と比べると、chunk 0 が届いて残りの Interest が戻ってくるまでの往復が 1 回多い。
@@ -90,12 +88,14 @@ Interest に `chunk_id`（要求するチャンクの番号）がある点だけ
 
 ```bash
 # p4-icn-router/ で（root でなければ sudo PATH=$PATH を前に付ける）
-python3 run_compare_chunk_methods.py -s 20 --content-id 10 --systems pull-burst \
+python3 run_compare_chunk_methods.py -s 20 --content-id 10 --systems pull \
     --out-prefix results/csv/<名前>
 ```
 
-`--systems pull-sequential` で 1 つずつ送る方式も測れる。チャンク数・リンク遅延の実験とオプションは
-[../README.md](../README.md) を参照。
+チャンク数・リンク遅延の実験とオプションは [../README.md](../README.md) を参照。
+
+以前は、前のチャンクが届いてから次の Interest を 1 つずつ送る方式（`pull-sequential`）も測れたが、
+往復をチャンクの数だけ待つので遅く、使わないので削除した。以前の結果では、今の方式を `pull-burst` と書いている。
 
 ### 手で動かす
 
@@ -104,7 +104,7 @@ cd chunk_pull            # p4-icn-router/ から
 make run                 # P4 をコンパイル → Mininet 起動 → 表を書き込む
 
 mininet> h2 python3 send_content.py --quiet &                                  # Producer
-mininet> h1 python3 ../consumer_bench.py 4 --mode pull --pull-strategy burst -n 10
+mininet> h1 python3 ../consumer_bench.py 4 --mode pull -n 10
 mininet> h1 python3 fetch_content.py 4      # 1 回取得して received_image/content4.bin に保存
 mininet> h1 python3 send_interest.py 4 2    # content 4 の chunk 2 の Interest を 1 本だけ送る
 mininet> exit

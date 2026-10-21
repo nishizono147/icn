@@ -4,9 +4,8 @@
 両方式で受信・送信・時間計算のコードを共通にし、違いは Interest の送り方だけにする。
 
   --mode table : Interest を 1 本送る。スイッチ（または Producer）が全チャンクを返す
-  --mode pull  : chunk 0 の Interest を送り、Data の total_chunks でチャンク数 N を知る
-      --pull-strategy sequential : 前のチャンクが届いてから次の Interest を送る
-      --pull-strategy burst      : chunk 0 が届いたら chunk 1..N-1 の Interest をまとめて送る
+  --mode pull  : chunk 0 の Interest を送り、Data の total_chunks でチャンク数 N を知ったら、
+                 chunk 1..N-1 の Interest をまとめて送る
 
 Data は AF_PACKET ソケットで直接受け取り、Interest は事前に組み立てたバイト列を送る。
 pcap ファイルの読み直しや Scapy の送信処理がチャンクの間に入らないようにするため。
@@ -210,14 +209,13 @@ def drain(sock):
         sock.recv(65535)
 
 
-def fetch_once(mode, strategy, content_id, rx, tx, interests, timeout):
+def fetch_once(mode, content_id, rx, tx, interests, timeout):
     """1 試行分の取得。受信したチャンク {chunk_id: data}、送った Interest の数、
     最初の Interest を送る直前の時刻を返す。"""
     received = {}
     total = None
     sent = 1
-    next_chunk = 1  # sequential で次に要求するチャンク
-    burst_done = False
+    rest_sent = False  # pull: chunk 1..N-1 の Interest を送ったか
     send_time = time.time()
     tx.send(interests[0])
     deadline = time.monotonic() + timeout
@@ -240,16 +238,11 @@ def fetch_once(mode, strategy, content_id, rx, tx, interests, timeout):
         if total > MAX_CHUNKS:
             sys.exit(f"total_chunks={total} が上限 {MAX_CHUNKS} を超えている")
 
-        if mode == "pull":
-            if strategy == "burst" and not burst_done:
-                for c in range(1, total):
-                    tx.send(interests[c])
-                sent += total - 1
-                burst_done = True
-            elif strategy == "sequential" and chunk_id == next_chunk - 1 and next_chunk < total:
-                tx.send(interests[next_chunk])
-                sent += 1
-                next_chunk += 1
+        if mode == "pull" and not rest_sent:
+            for c in range(1, total):
+                tx.send(interests[c])
+            sent += total - 1
+            rest_sent = True
     return received, total, sent, send_time
 
 
@@ -280,8 +273,7 @@ def run(args):
     tx = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, 0)
     tx.bind((iface, 0))
 
-    label = args.mode if args.mode == "table" else f"pull-{args.pull_strategy}"
-    print(f"# mode={label} content_id={args.content_id} trials={args.trials} "
+    print(f"# mode={args.mode} content_id={args.content_id} trials={args.trials} "
           f"interval={args.interval}s iface={iface} start_time={args.start_time}", flush=True)
 
     tcpdump = start_tcpdump(iface, args.pcap)
@@ -290,7 +282,7 @@ def run(args):
         for trial in range(1, args.trials + 1):
             drain(rx)
             received, total, sent, send_time = fetch_once(
-                args.mode, args.pull_strategy, args.content_id, rx, tx, interests, args.timeout,
+                args.mode, args.content_id, rx, tx, interests, args.timeout,
             )
             complete = total is not None and len(received) == total
             script_side.append((complete, sent, verify(received, total, expected), send_time))
@@ -350,7 +342,6 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("content_id", type=int, help="コンテンツ ID（N = contentN.bin、N チャンク）")
     parser.add_argument("--mode", choices=["table", "pull"], required=True)
-    parser.add_argument("--pull-strategy", choices=["sequential", "burst"], default="burst")
     parser.add_argument("-n", "--trials", type=int, default=10)
     parser.add_argument("-i", "--interval", type=float, default=0.2)
     parser.add_argument("-t", "--timeout", type=float, default=5.0, help="1 試行のタイムアウト（秒）")

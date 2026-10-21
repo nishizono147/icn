@@ -80,7 +80,7 @@ p4lang/tutorials の VM（VirtualBox など。`../vm-ubuntu-24.04/`）でも、D
 
 | スクリプト | 何をするか |
 |---|---|
-| `consumer_bench.py` | h1 で動かす共通の Consumer。`--mode table`（Interest 1 本）と `--mode pull`（チャンクごと。`--pull-strategy burst` = 残りをまとめて送る、`sequential` = 1 つずつ送る）。同じコンテンツを連続で N 回取得し、取得時間・返した場所・内容が正しいかを `RESULT,...` の行で出力する |
+| `consumer_bench.py` | h1 で動かす共通の Consumer。`--mode table`（Interest 1 本）と `--mode pull`（chunk 0 の Interest を送り、届いたら残りのチャンクの Interest をまとめて送る）。同じコンテンツを連続で N 回取得し、取得時間・返した場所・内容が正しいかを `RESULT,...` の行で出力する |
 | `run_compare_chunk_methods.py` | 実験の本体。Mininet を起動して Producer と Consumer を動かし、方式を交互に何セッションも計測して CSV に保存する。チャンク数の比較（複数のコンテンツ）とリンクの遅延にも対応 |
 | `plot_compare_chunk_methods.py` | 上の CSV から、横軸を要求回数（= 返す場所）にした方式の比較グラフを作る |
 | `plot_chunk_sweep.py` | 上の CSV（複数のコンテンツ）から、横軸をチャンク数にしたグラフを作る |
@@ -129,7 +129,7 @@ p4lang/tutorials の VM（VirtualBox など。`../vm-ubuntu-24.04/`）でも、D
 
 ```bash
 python3 run_compare_chunk_methods.py -s 20 --content-id 10 \
-    --systems table,pull-burst --out-prefix results/csv/compare_chunk_methods_c10
+    --systems table,pull --out-prefix results/csv/compare_chunk_methods_c10
 
 python3 -m pip install matplotlib matplotlib-fontja
 python3 plot_compare_chunk_methods.py \
@@ -145,13 +145,13 @@ python3 plot_compare_chunk_methods.py \
 
 ```bash
 python3 run_compare_chunk_methods.py -s 20 --content-id 1,2,3,4,5,6,7,8,9,10 \
-    --systems pull-burst --out-prefix results/csv/chunk_sweep_pull
+    --systems pull --out-prefix results/csv/chunk_sweep_pull
 
 python3 plot_chunk_sweep.py results/csv/chunk_sweep_pull_raw.csv \
-    --systems pull-burst --out results/png/chunk_sweep_pull.png
+    --systems pull --out results/png/chunk_sweep_pull.png
 ```
 
-chunk_table を測るときは `--systems table`（両方なら `table,pull-burst`。グラフは方式ごとにパネルを並べる）。
+chunk_table を測るときは `--systems table`（両方なら `table,pull`。グラフは方式ごとにパネルを並べる）。
 
 ### 実験 3: リンクに遅延を付ける
 
@@ -159,7 +159,7 @@ chunk_table を測るときは `--systems table`（両方なら `table,pull-burs
 遅延を書き足したものを作業フォルダに作って使う。
 
 ```bash
-python3 run_compare_chunk_methods.py -s 20 --content-id 10 --systems table,pull-burst \
+python3 run_compare_chunk_methods.py -s 20 --content-id 10 --systems table,pull \
     --link-delay 10ms --out-prefix results/csv/compare_chunk_methods_delay10ms
 ```
 
@@ -172,7 +172,7 @@ python3 run_compare_chunk_methods.py -s 20 --content-id 10 --systems table,pull-
 （Mininet を起動する前に各方式のフォルダへ移動するため）。
 
 ```bash
-python3 run_compare_chunk_methods.py -s 1 --content-id 10 --systems table,pull-burst \
+python3 run_compare_chunk_methods.py -s 1 --content-id 10 --systems table,pull \
     --work-dir /tmp/timeline --out-prefix /tmp/timeline/res
 python3 plot_timeline.py /tmp/timeline --session 1 --trial 3 --out results/png/timeline_s2.png
 # --trial 3 = s2 から返す回、5 = s1 から返す回
@@ -186,7 +186,7 @@ python3 plot_timeline.py /tmp/timeline --session 1 --trial 3 --out results/png/t
 | `-n`, `--trials` | 10 | 1 セッションで同じコンテンツを取得する回数 |
 | `-i`, `--interval` | 0.2 | 取得の間隔（秒） |
 | `--content-id` | 4 | コンテンツ ID（N = `contentN.bin`）。カンマ区切りで複数指定できる |
-| `--systems` | `table,pull-burst` | `table`、`pull-burst`、`pull-sequential` をカンマ区切りで |
+| `--systems` | `table,pull` | `table`、`pull` をカンマ区切りで |
 | `--link-delay` | なし | 全リンクの片道の遅延（例: `10ms`） |
 | `--work-dir` | `/tmp/compare_chunk_methods` | BMv2 のログ、pcap、Consumer の出力を置く場所（絶対パス） |
 | `--out-prefix` | `results/csv/compare_chunk_methods` | 結果の CSV（`<prefix>_raw.csv`、`<prefix>_summary.csv`） |
@@ -208,7 +208,8 @@ python3 plot_timeline.py /tmp/timeline --session 1 --trial 3 --out results/png/t
 | `max_gap_ms` | pull で、Data が届いてから次の Interest を送るまでの最大の間隔 |
 | `verified` | 受け取った内容が元のファイルと一致したか |
 
-古い結果の CSV には、後から追加した列（`content_id` など）がない。
+古い結果の CSV には、後から追加した列（`content_id` など）がない。また、`system` の `pull` を `pull-burst` と書いている
+（1 つずつ Interest を送る `pull-sequential` もあったが、使わないので削除した）。グラフのスクリプトは、どちらの名前でも読める。
 
 ## 主な結果
 
