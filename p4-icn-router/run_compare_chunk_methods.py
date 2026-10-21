@@ -31,10 +31,8 @@ sys.path.insert(0, os.path.join(ROOT, "..", "utils"))
 from run_exercise import ExerciseRunner  # noqa: E402
 
 CONSUMER = os.path.join(ROOT, "consumer_bench.py")
-CONTENT_FILES = {
-    4: os.path.join(ROOT, "contents", "image4.png"),      # 4 チャンク
-    6: os.path.join(ROOT, "contents", "content10.bin"),   # 10 チャンク
-}
+# content_id N = contentN.bin（N チャンク）。受け取った内容をこのファイルと照合する
+CONTENT_FILES = {n: os.path.join(ROOT, "contents", f"content{n}.bin") for n in range(1, 11)}
 
 SYSTEMS = {
     "table": {

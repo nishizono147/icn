@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify chunk_table: multi-chunk image4, switch cache, cache-hit delivery."""
+"""Verify chunk_table: multi-chunk content4.bin, switch cache, cache-hit delivery."""
 import hashlib
 import os
 import subprocess
@@ -12,7 +12,7 @@ from run_exercise import ExerciseRunner  # noqa: E402
 CONTENT_ID = 4
 CHUNK_SIZE = 256
 # コンテンツの元ファイルは p4-icn-router/contents/ にまとめて置く
-IMAGE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contents", "image4.png")
+IMAGE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contents", "content4.bin")
 
 
 def reg_read(net, sw_name, reg, idx):
@@ -64,7 +64,7 @@ def main():
 
     expected_chunks = (os.path.getsize(IMAGE_PATH) + CHUNK_SIZE - 1) // CHUNK_SIZE
     original_md5 = file_md5(IMAGE_PATH)
-    print(f"image4.png: {os.path.getsize(IMAGE_PATH)} bytes -> {expected_chunks} chunks")
+    print(f"content4.bin: {os.path.getsize(IMAGE_PATH)} bytes -> {expected_chunks} chunks")
     print(f"original md5: {original_md5}")
 
     subprocess.run(["make", "build"], check=True)
@@ -112,7 +112,7 @@ def main():
     check("h2 received Interest on cold fetch", h2_interests >= 1,
           f"interest events={h2_interests}")
 
-    received_path = f"received_image/image{CONTENT_ID}.png"
+    received_path = f"received_image/content{CONTENT_ID}.bin"
     received_exists = h1.cmd(f"test -f {received_path} && echo yes || echo no").strip() == "yes"
     check("received image file exists (phase 1)", received_exists, received_path)
 
@@ -187,7 +187,7 @@ def main():
     total = len(results["checks"])
     print(f"{passed}/{total} checks passed")
     if results["pass"]:
-        print("OVERALL: PASS - chunk_table works for image4 (multi-chunk cache + delivery)")
+        print("OVERALL: PASS - chunk_table works for content4.bin (multi-chunk cache + delivery)")
     else:
         print("OVERALL: FAIL - see failed checks above")
         # dump logs for debugging

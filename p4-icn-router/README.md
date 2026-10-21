@@ -17,7 +17,7 @@ P4（BMv2）で ICN ルータ（IWP）を実装し、キャッシュ配置の工
 | `ip_baseline/` | 比較用の IPv4 転送 + UDP 要求／応答（キャッシュなし） | 完了 |
 | `chunk_table/` | 複数チャンク + MCD。Interest 1 本でスイッチが全チャンクを返す（clone + recirculate） | 比較用として固定 |
 | `chunk_pull/` | 複数チャンク + MCD。チャンクごとに Interest を送る | **今後の土台** |
-| `contents/` | 全プロジェクトの Producer が返すコンテンツの元ファイル（`image1〜5.png`、`content10.bin`）。受信したものは各プロジェクトの `received_image/` に保存する | - |
+| `contents/` | 全プロジェクトの Producer が返すコンテンツの元ファイル。`content1〜10.bin` は chunk_table と chunk_pull 用（`contentN.bin` = N チャンク、`make_contents.py` で作る）、`image1〜4.png` は pit_table・mcd_cache・ip_baseline 用。受信したものは各プロジェクトの `received_image/` に保存する | - |
 
 トポロジはどれも `h1（Consumer）─ s1 ─ s2 ─ s3 ─ h2（Producer）`。
 MCD では要求のたびにキャッシュが Consumer 側へ 1 ホップずつ移動する
@@ -54,15 +54,17 @@ Mininet が必要なので、Docker のコンテナ内で実行する（詳細�
 ../run.sh    # コンテナに入る。カレントは /work/p4-icn-router
 
 # chunk_table と chunk_pull を交互に計測（10 チャンク、20 セッション）
-python3 run_compare_chunk_methods.py -s 20 --content-id 6 \
+python3 run_compare_chunk_methods.py -s 20 --content-id 10 \
     --systems table,pull-burst --out-prefix results/compare_chunk_methods_c10
 ```
 
 - 1 セッション = Mininet 起動 → Producer 起動 → 同じコンテンツを 10 回連続で要求 → Mininet 停止。
   方式ごとに 1 セッションずつ交互に回し、セッションごとに先に回す方式を入れ替える
 - `--systems`: `table`、`pull-burst`（残りをまとめて送る）、`pull-sequential`（1 つずつ送る）
-- `--content-id`: `4` = `image4.png`（4 チャンク）、`6` = `content10.bin`（10 チャンク）。
-  スイッチの上限は 1 コンテンツ 10 チャンク
+- `--content-id`: `N` = `contents/contentN.bin`（N チャンク、N = 1〜10）。
+  スイッチの上限は 1 コンテンツ 10 チャンク。
+  2026-10-21 に割り当てを変えた。それより前の結果は `4` = `image4.png`（4 チャンク）、
+  `6` = `content10.bin`（10 チャンク）で測っている（`results/README.md` を参照）
 - 各試行で、全チャンクが届いたか、返す場所が MCD の想定どおりか、受け取った内容が元のファイルと
   一致するかを自動で確認する
 

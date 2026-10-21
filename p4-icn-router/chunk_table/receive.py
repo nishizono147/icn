@@ -23,7 +23,7 @@ def save_image(data, content_id):
     directory = "received_image"
     if not os.path.exists(directory):
         os.makedirs(directory)
-    filename = os.path.join(directory, f"image{content_id}.png")
+    filename = os.path.join(directory, f"content{content_id}.bin")
     try:
         with open(filename, 'wb') as f:
             f.write(data)

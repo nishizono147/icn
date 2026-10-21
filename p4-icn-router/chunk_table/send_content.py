@@ -18,14 +18,8 @@ H2_MAC = "08:00:00:00:02:22"
 
 # コンテンツの元ファイルは p4-icn-router/contents/ にまとめて置く
 CONTENT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contents")
-CONTENT_IMAGE_MAP = {
-    1: "image1.png",
-    2: "image2.png",
-    3: "image3.png",
-    4: "image4.png",
-    5: "image5.png",
-    6: "content10.bin",  # 256 B x 10 チャンクの計測用（乱数、seed=10）
-}
+# content_id N = contentN.bin（N チャンク = 256 B × N の乱数。contents/make_contents.py で作る）
+CONTENT_IMAGE_MAP = {n: f"content{n}.bin" for n in range(1, 11)}
 
 CHUNK_SIZE = 256
 # content_id -> list of prebuilt Ethernet frames (dst MAC patched on send)

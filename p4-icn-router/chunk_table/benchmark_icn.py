@@ -218,7 +218,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Measure ICN multi-chunk retrieval latency (chunk_table)."
     )
-    parser.add_argument("content_id", type=int, help="Content ID (4=image4.png)")
+    parser.add_argument("content_id", type=int, help="Content ID (N = contentN.bin, N chunks)")
     parser.add_argument("-n", "--trials", type=int, default=10)
     parser.add_argument("-i", "--interval", type=float, default=0.2)
     parser.add_argument("-t", "--timeout", type=float, default=15.0)

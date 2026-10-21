@@ -348,7 +348,7 @@ def run(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("content_id", type=int, help="コンテンツ ID（4 = image4.png）")
+    parser.add_argument("content_id", type=int, help="コンテンツ ID（N = contentN.bin、N チャンク）")
     parser.add_argument("--mode", choices=["table", "pull"], required=True)
     parser.add_argument("--pull-strategy", choices=["sequential", "burst"], default="burst")
     parser.add_argument("-n", "--trials", type=int, default=10)

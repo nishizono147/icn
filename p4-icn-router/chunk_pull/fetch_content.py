@@ -106,7 +106,7 @@ def wait_for_chunk(pcap_path, content_id, chunk_id, seen_count, timeout):
 def save_image(data, content_id):
     directory = "received_image"
     os.makedirs(directory, exist_ok=True)
-    filename = os.path.join(directory, f"image{content_id}.png")
+    filename = os.path.join(directory, f"content{content_id}.bin")
     with open(filename, "wb") as f:
         f.write(data)
     print(f"Image saved as {filename}")
@@ -168,7 +168,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Fetch ICN content using Method A (N Interests, pull model)."
     )
-    parser.add_argument("content_id", type=int, help="Content ID (4=image4.png)")
+    parser.add_argument("content_id", type=int, help="Content ID (N = contentN.bin, N chunks)")
     parser.add_argument(
         "-t", "--timeout", type=float, default=10.0,
         help="Seconds to wait per chunk (default: 10.0)",

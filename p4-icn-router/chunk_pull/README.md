@@ -53,11 +53,11 @@ make run
 
 mininet> h2 python3 send_content.py --quiet &
 mininet> h1 python3 ../consumer_bench.py 4 --mode pull --pull-strategy burst -n 10
-mininet> h1 python3 fetch_content.py 4      # 1 回取得して画像を保存（動作確認用）
+mininet> h1 python3 fetch_content.py 4      # 1 回取得して received_image/content4.bin に保存（動作確認用）
 ```
 
 コンテンツのファイルは `../contents/` のものを使う
-（`content_id` 4 = `image4.png`、4 チャンク / 6 = `content10.bin`、10 チャンク）。
+（`content_id` N = `contentN.bin`、N チャンク、N = 1〜10）。
 
 ## ファイル
 
