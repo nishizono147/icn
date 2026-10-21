@@ -56,7 +56,7 @@ mininet> h1 python3 ../consumer_bench.py 4 --mode pull --pull-strategy burst -n 
 mininet> h1 python3 fetch_content.py 4      # 1 回取得して画像を保存（動作確認用）
 ```
 
-コンテンツのファイルは `../chunk_table/` のものを使う
+コンテンツのファイルは `../contents/` のものを使う
 （`content_id` 4 = `image4.png`、4 チャンク / 6 = `content10.bin`、10 チャンク）。
 
 ## ファイル

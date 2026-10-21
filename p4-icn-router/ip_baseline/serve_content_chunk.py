@@ -13,7 +13,8 @@ from udp_content import CHUNK_SIZE, REQUEST_PORT
 
 H2_IP = "10.0.2.2"
 CONTENT_ID = 4
-IMAGE_PATH = "image4.png"
+# コンテンツの元ファイルは p4-icn-router/contents/ にまとめて置く
+IMAGE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contents", "image4.png")
 
 PREBUILT_PAYLOADS = []
 TOTAL_CHUNKS = 0

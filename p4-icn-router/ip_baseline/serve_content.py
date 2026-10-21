@@ -10,6 +10,8 @@ H2_GATEWAY_MAC = "08:00:00:00:02:00"
 H2_IP = "10.0.2.2"
 from udp_content import REQUEST_PORT, udp_request, udp_response
 
+# コンテンツの元ファイルは p4-icn-router/contents/ にまとめて置く
+CONTENT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contents")
 CONTENT_IMAGE_MAP = {
     1: "image1.png",
     2: "image2.png",
@@ -27,7 +29,8 @@ IFACE_MAC = None
 def load_content_cache():
     """Load content into memory once at startup (like P4 content_cache.write)."""
     cache = {}
-    for content_id, path in CONTENT_IMAGE_MAP.items():
+    for content_id, name in CONTENT_IMAGE_MAP.items():
+        path = os.path.join(CONTENT_DIR, name)
         try:
             with open(path, "rb") as f:
                 cache[content_id] = f.read(REGISTER_DATA_LEN)

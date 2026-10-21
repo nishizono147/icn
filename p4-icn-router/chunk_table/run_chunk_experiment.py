@@ -11,7 +11,8 @@ from run_exercise import ExerciseRunner  # noqa: E402
 
 CONTENT_ID = 4
 CHUNK_SIZE = 256
-IMAGE_PATH = "image4.png"
+# コンテンツの元ファイルは p4-icn-router/contents/ にまとめて置く
+IMAGE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contents", "image4.png")
 
 
 def reg_read(net, sw_name, reg, idx):

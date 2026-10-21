@@ -17,6 +17,7 @@ P4（BMv2）で ICN ルータ（IWP）を実装し、キャッシュ配置の工
 | `ip_baseline/` | 比較用の IPv4 転送 + UDP 要求／応答（キャッシュなし） | 完了 |
 | `chunk_table/` | 複数チャンク + MCD。Interest 1 本でスイッチが全チャンクを返す（clone + recirculate） | 比較用として固定 |
 | `chunk_pull/` | 複数チャンク + MCD。チャンクごとに Interest を送る | **今後の土台** |
+| `contents/` | 全プロジェクトの Producer が返すコンテンツの元ファイル（`image1〜5.png`、`content10.bin`）。受信したものは各プロジェクトの `received_image/` に保存する | - |
 
 トポロジはどれも `h1（Consumer）─ s1 ─ s2 ─ s3 ─ h2（Producer）`。
 MCD では要求のたびにキャッシュが Consumer 側へ 1 ホップずつ移動する

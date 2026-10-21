@@ -10,6 +10,8 @@ from scapy.all import Ether, get_if_hwaddr, get_if_list, sendp, sniff
 
 INTEREST_ETHER_TYPE = 0x88B5
 
+# コンテンツの元ファイルは p4-icn-router/contents/ にまとめて置く
+CONTENT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contents")
 CONTENT_IMAGE_MAP = {
     1: "image1.png",
     2: "image2.png",
@@ -27,7 +29,8 @@ IFACE_MAC = None
 def load_content_cache():
     """Load content into memory once at startup (like P4 content_cache.write)."""
     cache = {}
-    for content_id, path in CONTENT_IMAGE_MAP.items():
+    for content_id, name in CONTENT_IMAGE_MAP.items():
+        path = os.path.join(CONTENT_DIR, name)
         try:
             with open(path, "rb") as f:
                 cache[content_id] = f.read(REGISTER_DATA_LEN)

@@ -18,8 +18,8 @@ DATA_TYPE = 0x88B6
 H2_MAC = "08:00:00:00:02:22"
 CHUNK_SIZE = 256
 
-# Reuse content files from chunk_table
-CONTENT_DIR = os.path.join(os.path.dirname(__file__), "..", "chunk_table")
+# コンテンツの元ファイルは p4-icn-router/contents/ にまとめて置く
+CONTENT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contents")
 CONTENT_IMAGE_MAP = {
     1: "image1.png",
     2: "image2.png",

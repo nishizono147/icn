@@ -16,6 +16,8 @@ INTEREST_TYPE = 0x88B5
 DATA_TYPE = 0x88B6
 H2_MAC = "08:00:00:00:02:22"
 
+# コンテンツの元ファイルは p4-icn-router/contents/ にまとめて置く
+CONTENT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contents")
 CONTENT_IMAGE_MAP = {
     1: "image1.png",
     2: "image2.png",
@@ -65,7 +67,8 @@ def build_prebuilt(content_id, chunks, h2_mac):
 
 def load_all_prebuilt(h2_mac):
     cache = {}
-    for content_id, path in CONTENT_IMAGE_MAP.items():
+    for content_id, name in CONTENT_IMAGE_MAP.items():
+        path = os.path.join(CONTENT_DIR, name)
         try:
             chunks = load_content_chunks(path)
             cache[content_id] = build_prebuilt(content_id, chunks, h2_mac)

@@ -13,6 +13,8 @@ TYPE_IPV4 = 0x0800
 TYPE_UDP = 0x11
 TYPE_TCP = 0x6
 
+# コンテンツの元ファイルは p4-icn-router/contents/ にまとめて置く
+CONTENT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "contents")
 # Mapping content_id to image paths
 CONTENT_IMAGE_MAP = {
     1: "image1.png",
@@ -50,7 +52,7 @@ def handle_pkt(packet):
             print(f"No image mapped for content_id: {content_id}")
             return
 
-        image_data = read_image(image_path)
+        image_data = read_image(os.path.join(CONTENT_DIR, image_path))
         if not image_data:
             print(f"Failed to read image for content_id: {content_id}")
             return
