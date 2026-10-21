@@ -53,21 +53,26 @@ h1（Consumer）─ s1 ─ s2 ─ s3 ─ h2（Producer）
 |---|---|---|---|---|
 | 返す場所 | h2（Producer） | s3 | s2 | s1 |
 
-### 実行環境（Docker）
+### 実行環境
 
-Mininet が必要なので、Docker のコンテナ（`p4dev:24.04`）の中で実行する。詳細は [../DOCKER.md](../DOCKER.md)。
+p4c、BMv2（`simple_switch_grpc`）、Mininet が入った Linux で実行する。
+p4lang/tutorials の VM（VirtualBox など。`../vm-ubuntu-24.04/`）でも、Docker のコンテナ（[../DOCKER.md](../DOCKER.md)）でもよい。
+このリポジトリの構成（`p4-icn-router/` の 1 つ上に `utils/` がある）のまま使う。
 
-```bash
-# リポジトリのルート（p4-icn-router の 1 つ上）で
-./run.sh                 # コンテナに入る。カレントは /work/p4-icn-router
+- コマンドはすべて `p4-icn-router/` から実行する（各方式のフォルダで実行するものは、そう書いている）
+- Mininet を使うスクリプト（`run_compare_chunk_methods.py`、`chunk_table/run_chunk_experiment.py`、`make run`）は
+  root 権限が必要。root でなければ、`make run` と同じように `sudo PATH=$PATH` を前に付ける
+  （p4c や Python のパッケージを、今の PATH にあるものを使うため）
 
-# 対話せずに 1 つのコマンドだけ実行する場合
-docker run --rm --privileged -v "$PWD:/work" -w /work/p4-icn-router p4dev:24.04 \
-    bash -c 'python3 run_compare_chunk_methods.py -s 1 --content-id 4'
-```
+  ```bash
+  sudo PATH=$PATH python3 run_compare_chunk_methods.py -s 1 --content-id 4
+  ```
 
-グラフを作るスクリプトは matplotlib と日本語フォントが必要。コンテナには入っていないので、
-コンテナに入るたびに `python3 -m pip install matplotlib matplotlib-fontja` を実行する（`--rm` なので残らない）。
+- グラフを作るスクリプトは matplotlib と日本語フォントが必要。入っていなければ
+  `python3 -m pip install matplotlib matplotlib-fontja` で入れる
+- tcpdump を使う（`consumer_bench.py` が h1 で記録する）
+
+取得時間は、動かすマシンや環境（VM かどうかなど）で変わる。比べる計測は同じ環境で行う。
 
 ## スクリプト
 

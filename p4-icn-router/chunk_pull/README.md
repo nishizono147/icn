@@ -89,7 +89,7 @@ Interest に `chunk_id`（要求するチャンクの番号）がある点だけ
 ### 計測（1 つ上のディレクトリで）
 
 ```bash
-cd /work/p4-icn-router
+# p4-icn-router/ で（root でなければ sudo PATH=$PATH を前に付ける）
 python3 run_compare_chunk_methods.py -s 20 --content-id 10 --systems pull-burst \
     --out-prefix results/csv/<名前>
 ```
@@ -97,10 +97,10 @@ python3 run_compare_chunk_methods.py -s 20 --content-id 10 --systems pull-burst 
 `--systems pull-sequential` で 1 つずつ送る方式も測れる。チャンク数・リンク遅延の実験とオプションは
 [../README.md](../README.md) を参照。
 
-### 手で動かす（Docker のコンテナ内）
+### 手で動かす
 
 ```bash
-cd /work/p4-icn-router/chunk_pull
+cd chunk_pull            # p4-icn-router/ から
 make run                 # P4 をコンパイル → Mininet 起動 → 表を書き込む
 
 mininet> h2 python3 send_content.py --quiet &                                  # Producer

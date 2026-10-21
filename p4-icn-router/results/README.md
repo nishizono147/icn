@@ -80,7 +80,7 @@ chunk_table と chunk_pull の `content_id` の割り当ては 2026-10-21 に変
 
 ## グラフの作り直し方
 
-コンテナの中で、`p4-icn-router/` から実行する（先に `python3 -m pip install matplotlib matplotlib-fontja`）。
+`p4-icn-router/` から実行する（matplotlib と日本語フォントが必要。`python3 -m pip install matplotlib matplotlib-fontja`）。
 
 ```bash
 # 方式の比較（4 チャンクと 10 チャンクを並べる）
