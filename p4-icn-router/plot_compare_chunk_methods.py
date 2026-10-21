@@ -59,8 +59,6 @@ def main():
     parser.add_argument("--panel", action="append", required=True,
                         help="'見出し:raw.csv のパス'（複数指定でパネルを横に並べる）")
     parser.add_argument("--systems", default="table,pull-burst")
-    parser.add_argument("--separate-y", action="store_true",
-                        help="パネルごとに縦軸の範囲を変える（リンク遅延の有無など、値の大きさが違うとき）")
     parser.add_argument("--out", default=os.path.join(ROOT, "results", "compare_chunk_methods.png"))
     args = parser.parse_args()
 
@@ -73,14 +71,13 @@ def main():
         panels.append((title, *load(path, systems)))
 
     fig, axes = plt.subplots(1, len(panels), figsize=(max(5.6 * len(panels), 9.0), 4.8),
-                             sharey=not args.separate_y, squeeze=False)
+                             sharey=True, squeeze=False)
     fig.patch.set_facecolor(SURFACE)
     ymax = 0.0
     sessions = set()
 
     for ax, (title, data, source) in zip(axes[0], panels):
         ax.set_facecolor(SURFACE)
-        ax_ymax = 0.0
         trials = sorted(source)
         for system in systems:
             spec = SERIES[system]
@@ -88,8 +85,7 @@ def main():
             stds = [statistics.stdev(data[system][t]) if len(data[system][t]) > 1 else 0.0
                     for t in trials]
             sessions.update(len(data[system][t]) for t in trials)
-            ax_ymax = max(ax_ymax, max(m + s for m, s in zip(means, stds)))
-            ymax = max(ymax, ax_ymax)
+            ymax = max(ymax, max(m + s for m, s in zip(means, stds)))
             ax.fill_between(trials, [m - s for m, s in zip(means, stds)],
                             [m + s for m, s in zip(means, stds)],
                             color=spec["color"], alpha=0.15, linewidth=0)
@@ -115,12 +111,9 @@ def main():
         for side in ("left", "bottom"):
             ax.spines[side].set_color(MUTED)
         ax.tick_params(colors=MUTED, labelcolor=TEXT_SECONDARY)
-        if args.separate_y:
-            ax.set_ylim(0, ax_ymax * 1.15)
 
     axes[0][0].set_ylabel("コンテンツ取得時間 (ms)", fontsize=9, color=TEXT_SECONDARY)
-    if not args.separate_y:
-        axes[0][0].set_ylim(0, ymax * 1.15)
+    axes[0][0].set_ylim(0, ymax * 1.15)
 
     handles, labels = axes[0][0].get_legend_handles_labels()
     n = "/".join(str(x) for x in sorted(sessions))
