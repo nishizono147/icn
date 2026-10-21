@@ -11,8 +11,8 @@ plt.rcParams["font.sans-serif"] = [
 plt.rcParams["axes.unicode_minus"] = False
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-CSV_PATH = os.path.join(ROOT, "results", "compare_chunk_table_pull.csv")
-PNG_PATH = os.path.join(ROOT, "results", "compare_chunk_table_pull.png")
+CSV_PATH = os.path.join(ROOT, "results", "csv", "compare_chunk_table_pull.csv")
+PNG_PATH = os.path.join(ROOT, "results", "png", "compare_chunk_table_pull.png")
 
 # Mean latency (ms) per trial — 10 sessions averaged
 CHUNK_TABLE = [

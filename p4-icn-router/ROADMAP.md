@@ -287,7 +287,7 @@ cache_tag[index]      … そこに入っている名前 + chunk_id
 
 ## 9. 整理しておくもの
 
-- 出どころのわからない前の結果ファイル（`results/compare_chunk_ip_means.csv`、`compare_chunk_table_pull.*`）と、
+- 出どころのわからない前の結果ファイル（`results/csv/compare_chunk_ip_means.csv`、`compare_chunk_table_pull.*`）と、
   数値を手で書いたグラフ用スクリプト（`run_compare_chunk_table_pull_graph.py`）
 - `METHODOLOGY.md` を今の計測方法に合わせて書き直す
 - `chunk_table/RESEARCH_POSITIONING.txt` の比較表で「要確認」になっている、先行研究の成功判定の根拠を確定させる

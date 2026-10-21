@@ -257,10 +257,10 @@ def main():
     parser.add_argument("-i", "--interval", type=float, default=0.2)
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument(
-        "--csv", default=os.path.join(ROOT, "results", "compare_chunk_ip.csv"),
+        "--csv", default=os.path.join(ROOT, "results", "csv", "compare_chunk_ip.csv"),
     )
     parser.add_argument(
-        "--png", default=os.path.join(ROOT, "results", "compare_chunk_ip.png"),
+        "--png", default=os.path.join(ROOT, "results", "png", "compare_chunk_ip.png"),
     )
     args = parser.parse_args()
 

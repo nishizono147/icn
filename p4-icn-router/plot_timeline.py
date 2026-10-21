@@ -4,7 +4,7 @@
 run_compare_chunk_methods.py を --work-dir 付きで実行し、そのディレクトリに残った
 h1 の記録（<方式>_s<番号>.pcap）と、BMv2 が各スイッチのポートで取った記録（<方式>_s<番号>/pcaps/）を読む。
 
-  python3 plot_timeline.py <work_dir> --session 1 --trial 5 --out results/timeline_s1.png
+  python3 plot_timeline.py <work_dir> --session 1 --trial 5 --out results/png/timeline_s1.png
   （trial 5 = s1 から返す回、trial 3 = s2 から返す回）
 
 縦軸はノード（h1, s1, s2, s3）、横軸はその回の最初の Interest を h1 が送ってからの時間。

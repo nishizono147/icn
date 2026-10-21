@@ -209,7 +209,7 @@ sudo env PATH=/home/p4/src/p4dev-python-venv/bin:$PATH \
   python3 run_compare_graph.py
 ```
 
-出力: `results/compare_icn_ip.csv`, `results/compare_icn_ip.png`
+出力: `results/csv/compare_icn_ip.csv`, `results/png/compare_icn_ip.png`
 
 ---
 
@@ -287,8 +287,8 @@ sudo env PATH=/home/p4/src/p4dev-python-venv/bin:$PATH \
 | `ip_baseline/benchmark_ip_chunk.py` | chunk IP 取得時間計測 |
 | `ip_baseline/serve_content_chunk.py` | chunk IP Producer（kernel UDP + 事前組立） |
 | `run_compare_chunk_graph.py` | chunk 比較の一括実行・グラフ生成 |
-| `results/compare_chunk_ip.csv` | chunk 比較生データ |
-| `results/compare_chunk_ip.png` | chunk 比較グラフ |
+| `results/csv/compare_chunk_ip.csv` | chunk 比較生データ |
+| `results/png/compare_chunk_ip.png` | chunk 比較グラフ |
 
 ---
 

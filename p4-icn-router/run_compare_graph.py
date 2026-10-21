@@ -293,9 +293,10 @@ def main():
     if (args.sessions - args.report_sessions) % 2 != 0:
         parser.error("sessions - report-sessions must be even (symmetric trim)")
 
-    os.makedirs(args.out_dir, exist_ok=True)
-    csv_path = args.csv or os.path.join(args.out_dir, "compare_icn_ip.csv")
-    png_path = args.png or os.path.join(args.out_dir, "compare_icn_ip.png")
+    csv_path = args.csv or os.path.join(args.out_dir, "csv", "compare_icn_ip.csv")
+    png_path = args.png or os.path.join(args.out_dir, "png", "compare_icn_ip.png")
+    for p in (csv_path, png_path):
+        os.makedirs(os.path.dirname(os.path.abspath(p)), exist_ok=True)
 
     if args.plot_only:
         if not os.path.exists(csv_path):

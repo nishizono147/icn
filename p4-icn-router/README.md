@@ -32,7 +32,7 @@ MCD では要求のたびにキャッシュが Consumer 側へ 1 ホップずつ
 | スイッチの機能 | `clone` + `recirculate`（BMv2 依存） | 通常の転送と register のみ |
 | 失われたチャンク | 個別に要求し直せない | そのチャンクだけ要求し直せる |
 
-計測結果（取得時間 ms、各 20 セッションの平均。`results/compare_chunk_methods.png`）:
+計測結果（取得時間 ms、各 20 セッションの平均。`results/png/compare_chunk_methods.png`）:
 
 | 返す場所 | 4 チャンク table / pull | 10 チャンク table / pull |
 |---|---|---|
@@ -55,7 +55,7 @@ Mininet が必要なので、Docker のコンテナ内で実行する（詳細�
 
 # chunk_table と chunk_pull を交互に計測（10 チャンク、20 セッション）
 python3 run_compare_chunk_methods.py -s 20 --content-id 10 \
-    --systems table,pull-burst --out-prefix results/compare_chunk_methods_c10
+    --systems table,pull-burst --out-prefix results/csv/compare_chunk_methods_c10
 ```
 
 - 1 セッション = Mininet 起動 → Producer 起動 → 同じコンテンツを 10 回連続で要求 → Mininet 停止。
@@ -73,9 +73,9 @@ python3 run_compare_chunk_methods.py -s 20 --content-id 10 \
 ```bash
 python3 -m pip install matplotlib matplotlib-fontja
 python3 plot_compare_chunk_methods.py \
-    --panel "4 チャンク（1 KB）:results/compare_chunk_methods_raw.csv" \
-    --panel "10 チャンク（2.5 KB）:results/compare_chunk_methods_c10_raw.csv" \
-    --out results/compare_chunk_methods.png
+    --panel "4 チャンク（1 KB）:results/csv/compare_chunk_methods_raw.csv" \
+    --panel "10 チャンク（2.5 KB）:results/csv/compare_chunk_methods_c10_raw.csv" \
+    --out results/png/compare_chunk_methods.png
 ```
 
 ### 取得時間の測り方（`consumer_bench.py`）
@@ -93,10 +93,10 @@ python3 plot_compare_chunk_methods.py \
 | `consumer_bench.py` | 共通の Consumer（`--mode table` / `--mode pull --pull-strategy burst\|sequential`） |
 | `run_compare_chunk_methods.py` | 方式を交互に回して計測し、CSV に出力する |
 | `plot_compare_chunk_methods.py` | 上の CSV からグラフを作る |
-| `results/compare_chunk_methods_raw.csv` / `_summary.csv` | 4 チャンクの結果（3 方式） |
-| `results/compare_chunk_methods_c10_raw.csv` / `_summary.csv` | 10 チャンクの結果 |
-| `results/compare_chunk_methods_step1_*` / `_step2_*` | chunk_pull の PIT をチャンクごとに分ける前と後の確認 |
-| `results/compare_chunk_methods.png` | 4 チャンクと 10 チャンクの比較グラフ |
+| `results/csv/compare_chunk_methods_raw.csv` / `_summary.csv` | 4 チャンクの結果（3 方式） |
+| `results/csv/compare_chunk_methods_c10_raw.csv` / `_summary.csv` | 10 チャンクの結果 |
+| `results/csv/compare_chunk_methods_step1_*` / `_step2_*` | chunk_pull の PIT をチャンクごとに分ける前と後の確認 |
+| `results/png/compare_chunk_methods.png` | 4 チャンクと 10 チャンクの比較グラフ |
 | `METHODOLOGY.md` | ICN（pit_table）と IP の比較実験の手法 |
 | `設計メモ.txt` | IP 上で動く ICN の設計（FIB / LCST / ECST / PIT / NMT / NRS） |
 | `chunk_table/CHUNK_CACHE_DESIGN.md` | chunk_table のスイッチの設計 |
@@ -110,8 +110,8 @@ python3 plot_compare_chunk_methods.py \
   chunk_pull 側は録画ファイルに Data が書かれるまで待ってから次の Interest を送るため、
   tcpdump のバッファ（最大約 1 秒）の分だけチャンクごとに待たされ、取得時間が約 2.7 秒になっていた
 - `run_compare_chunk_table_pull_graph.py`: 数値をコードに直接書いてグラフにしている
-- `results/compare_chunk_ip_means.csv`、`compare_chunk_table_pull.*`: 生成したスクリプトや手順がわからない
-- `results/compare_chunk_ip.*`: 6 セッションのみで、セッションごとのばらつきが大きい（VirtualBox 環境）
+- `results/csv/compare_chunk_ip_means.csv`、`compare_chunk_table_pull.*`: 生成したスクリプトや手順がわからない
+- `results/csv/compare_chunk_ip.csv`、`results/png/compare_chunk_ip.png`: 6 セッションのみで、セッションごとのばらつきが大きい（VirtualBox 環境）
 
 ## 今後の予定
 

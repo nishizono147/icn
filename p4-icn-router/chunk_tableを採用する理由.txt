@@ -16,7 +16,7 @@ chunk_table（push 型）を採用する理由
 ■ 理由 1：キャッシュが遠い場合に速い
 ================================================================
 
-計測結果（取得時間 ms、各 20 セッションの平均。results/compare_chunk_methods_raw.csv、
+計測結果（取得時間 ms、各 20 セッションの平均。results/csv/compare_chunk_methods_raw.csv、
 compare_chunk_methods_c10_raw.csv、compare_chunk_methods_c10_run2_raw.csv、my_c10_raw.csv）
 
   | 返す場所       | 4 チャンク table / pull | 10 チャンク table / pull |

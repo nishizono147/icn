@@ -1,5 +1,15 @@
 # 計測結果の一覧
 
+| フォルダ | 中身 |
+|---|---|
+| `csv/` | 計測の生データ（`*_raw.csv`）と集計（`*_summary.csv`） |
+| `png/` | グラフ |
+| `log/` | 実行ログ |
+
+同じ計測の CSV とグラフは、フォルダが違っても同じ名前で始まる
+（例: `csv/compare_chunk_methods_c10_run2_raw.csv` と `png/compare_chunk_methods_c10_run2.png`）。
+下の表のファイル名は、フォルダを省いて書いている。
+
 chunk_table と chunk_pull の `content_id` の割り当ては 2026-10-21 に変えた。
 
 | 期間 | content_id の割り当て |
@@ -22,6 +32,12 @@ chunk_table と chunk_pull の `content_id` の割り当ては 2026-10-21 に変
 | `my_c10_*` | 2026-10-16 | 旧 6（`content10.bin`） | 10 | なし | 20 |
 | `compare_chunk_methods_delay10ms_*` | 2026-10-20 | 旧 6（`content10.bin`） | 10 | 全リンク片道 10 ms | 20 |
 | `compare_chunk_methods_delay5ms_*` | 2026-10-21 | 旧 6（`content10.bin`） | 10 | 全リンク片道 5 ms | 20 |
+
+## チャンク数を変えた計測（`--content-id 1,2,...,10`、CSV に content_id と n_chunks の列がある）
+
+| ファイル | 計測した日 | 方式 | コンテンツ | リンクの遅延 | セッション |
+|---|---|---|---|---|---|
+| `chunk_sweep_pull_*` | 2026-10-21 | chunk_pull（pull-burst） | `content1〜10.bin` | なし | 20 |
 
 ## それより前のスクリプトの結果
 

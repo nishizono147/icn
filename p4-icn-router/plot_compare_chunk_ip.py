@@ -14,8 +14,8 @@ plt.rcParams["font.sans-serif"] = [
 plt.rcParams["axes.unicode_minus"] = False
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_CSV = os.path.join(ROOT, "results", "compare_chunk_ip.csv")
-DEFAULT_PNG = os.path.join(ROOT, "results", "compare_chunk_ip.png")
+DEFAULT_CSV = os.path.join(ROOT, "results", "csv", "compare_chunk_ip.csv")
+DEFAULT_PNG = os.path.join(ROOT, "results", "png", "compare_chunk_ip.png")
 
 COLOR_ICN = "#1f77b4"
 COLOR_IP = "#d62728"

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """run_compare_chunk_methods.py の結果（*_raw.csv）から、方式ごとの取得時間をグラフにする。
 
-チャンク数ごとに 1 つのパネルを並べ、横軸は要求回数、縦軸は取得時間（平均、帯は ± 標準偏差）。
+チャンク数ごとに 1 つのパネルを並べ、横軸は要求回数、縦軸は取得時間（平均）。
 横軸の下段には、その要求で Data を返した場所（MCD のキャッシュ位置）を書く。
 
   python3 plot_compare_chunk_methods.py \
-      --panel "4 チャンク (1 KB):results/compare_chunk_methods_raw.csv" \
-      --panel "10 チャンク (2.5 KB):results/compare_chunk_methods_c10_raw.csv" \
-      --out results/compare_chunk_methods.png
+      --panel "4 チャンク (1 KB):results/csv/compare_chunk_methods_raw.csv" \
+      --panel "10 チャンク (2.5 KB):results/csv/compare_chunk_methods_c10_raw.csv" \
+      --out results/png/compare_chunk_methods.png
 """
 import argparse
 import csv
@@ -59,7 +59,7 @@ def main():
     parser.add_argument("--panel", action="append", required=True,
                         help="'見出し:raw.csv のパス'（複数指定でパネルを横に並べる）")
     parser.add_argument("--systems", default="table,pull-burst")
-    parser.add_argument("--out", default=os.path.join(ROOT, "results", "compare_chunk_methods.png"))
+    parser.add_argument("--out", default=os.path.join(ROOT, "results", "png", "compare_chunk_methods.png"))
     args = parser.parse_args()
 
     systems = [s.strip() for s in args.systems.split(",")]
@@ -82,13 +82,8 @@ def main():
         for system in systems:
             spec = SERIES[system]
             means = [statistics.mean(data[system][t]) for t in trials]
-            stds = [statistics.stdev(data[system][t]) if len(data[system][t]) > 1 else 0.0
-                    for t in trials]
             sessions.update(len(data[system][t]) for t in trials)
-            ymax = max(ymax, max(m + s for m, s in zip(means, stds)))
-            ax.fill_between(trials, [m - s for m, s in zip(means, stds)],
-                            [m + s for m, s in zip(means, stds)],
-                            color=spec["color"], alpha=0.15, linewidth=0)
+            ymax = max(ymax, max(means))
             ax.plot(trials, means, color=spec["color"], linewidth=2, marker=spec["marker"],
                     markersize=6, markeredgecolor=SURFACE, markeredgewidth=1.5,
                     label=spec["label"])
@@ -118,7 +113,7 @@ def main():
     handles, labels = axes[0][0].get_legend_handles_labels()
     n = "/".join(str(x) for x in sorted(sessions))
     fig.suptitle("chunk_table と chunk_pull の取得時間（256 B/チャンク、"
-                 f"各 {n} セッションの平均、帯は ± 標準偏差）",
+                 f"各 {n} セッションの平均）",
                  fontsize=11, color=TEXT, x=0.01, ha="left", y=0.99)
     fig.legend(handles, labels, loc="upper left", bbox_to_anchor=(0.01, 0.955), ncol=len(systems),
                frameon=False, fontsize=9, labelcolor=TEXT)
