@@ -240,6 +240,7 @@ python3 plot_timeline.py /tmp/timeline --session 1 --trial 3 --out results/png/t
 | [ROADMAP.md](ROADMAP.md) | 研究全体の計画 |
 | [FIB・2次元トポロジ実験の予定.txt](FIB・2次元トポロジ実験の予定.txt) | 12 月までの予定（水平キャッシュの設計、名前、FIB、2 次元トポロジ） |
 | [chunk_tableを採用する理由.txt](chunk_tableを採用する理由.txt) | chunk_table と chunk_pull の比較と、chunk_table を選んだ理由 |
+| [ヘッダの仕様.md](ヘッダの仕様.md) | 今後の実装で使う Interest・Data・通知のパケットの形 |
 | [水平キャッシュの設計.md](水平キャッシュの設計.md) | 水平キャッシュ（ECST、通知、リダイレクト）の設計 |
 | [P4を使う理由.txt](P4を使う理由.txt) | P4 を使う理由、VPP・NFD・hICN との違い |
 | [設計メモ.txt](設計メモ.txt) | IP 上で動く ICN の設計（FIB / LCST / ECST / PIT / NMT / NRS） |
