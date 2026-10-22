@@ -145,13 +145,14 @@ python3 plot_compare_chunk_methods.py \
 
 ```bash
 python3 run_compare_chunk_methods.py -s 20 --content-id 1,2,3,4,5,6,7,8,9,10 \
-    --systems pull --out-prefix results/csv/chunk_sweep_pull
+    --systems table --link-delay 5ms --out-prefix results/csv/chunk_sweep_table_delay5ms
 
-python3 plot_chunk_sweep.py results/csv/chunk_sweep_pull_raw.csv \
-    --systems pull --out results/png/chunk_sweep_pull.png
+python3 plot_chunk_sweep.py results/csv/chunk_sweep_table_delay5ms_raw.csv --systems table \
+    --title "chunk_table（全リンク片道 5 ms）" --out results/png/chunk_sweep_table_delay5ms.png
 ```
 
-chunk_table を測るときは `--systems table`（両方なら `table,pull`。グラフは方式ごとにパネルを並べる）。
+遅延なしで測るときは `--link-delay` を外す。chunk_pull を測るときは `--systems pull` にする
+（`chunk_sweep_pull` は、chunk_pull を遅延なしで測った結果）。
 
 ### 実験 3: リンクに遅延を付ける
 
@@ -226,7 +227,10 @@ python3 plot_timeline.py /tmp/timeline --session 1 --trial 3 --out results/png/t
   chunk_pull は chunk 0 の往復を待つが、s1 から返すときは往復がほぼ 0 になり、
   chunk_table の「1 チャンクごとにスイッチの中を一周させる分」の方が大きくなるため
 - リンクに遅延を付けると、すべての場所で chunk_table が速い。chunk_pull は往復が 1 回多いため
-- チャンク数を変えた計測（chunk_pull）では、2 チャンク以上で取得時間はチャンク数にほぼ比例する
+- チャンク数を変えた計測では、取得時間はチャンク数にほぼ比例する。
+  chunk_table（全リンク片道 5 ms）は 1 チャンク増えるごとに、スイッチから返すとき約 0.6 ms、
+  h2 から返すとき約 0.3 ms 増える（`results/png/chunk_sweep_table_delay5ms.png`）。
+  chunk_pull（遅延なし）は 1 → 2 チャンクで chunk 0 の往復の分だけ大きく増え、その後はほぼ比例する
   （`results/png/chunk_sweep_pull.png`）
 
 ## ドキュメント
@@ -236,6 +240,7 @@ python3 plot_timeline.py /tmp/timeline --session 1 --trial 3 --out results/png/t
 | [ROADMAP.md](ROADMAP.md) | 研究全体の計画 |
 | [FIB・2次元トポロジ実験の予定.txt](FIB・2次元トポロジ実験の予定.txt) | 12 月までの予定（水平キャッシュの設計、名前、FIB、2 次元トポロジ） |
 | [chunk_tableを採用する理由.txt](chunk_tableを採用する理由.txt) | chunk_table と chunk_pull の比較と、chunk_table を選んだ理由 |
+| [水平キャッシュの設計.md](水平キャッシュの設計.md) | 水平キャッシュ（ECST、通知、リダイレクト）の設計 |
 | [P4を使う理由.txt](P4を使う理由.txt) | P4 を使う理由、VPP・NFD・hICN との違い |
 | [設計メモ.txt](設計メモ.txt) | IP 上で動く ICN の設計（FIB / LCST / ECST / PIT / NMT / NRS） |
 | [METHODOLOGY.md](METHODOLOGY.md) | 前の段階の比較実験（pit_table と IP）の手法 |

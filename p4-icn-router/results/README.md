@@ -58,6 +58,7 @@ chunk_table と chunk_pull の `content_id` の割り当ては 2026-10-21 に変
 | 名前 | 計測した日 | 方式 | コンテンツ | リンクの遅延 | セッション | グラフ |
 |---|---|---|---|---|---|---|
 | `chunk_sweep_pull` | 2026-10-21 | pull | `content1〜10.bin` | なし | 20 | `chunk_sweep_pull.png` |
+| `chunk_sweep_table_delay5ms` | 2026-10-21 | table | `content1〜10.bin` | 全リンク片道 5 ms | 20 | `chunk_sweep_table_delay5ms.png` |
 
 グラフの s1 の点は、セッションごとに 4〜10 回目（s1 から返る 7 回）を平均し、それを 20 セッション分平均した値。
 
@@ -106,6 +107,8 @@ for d in 5 10; do
 done
 
 # チャンク数の比較
+python3 plot_chunk_sweep.py results/csv/chunk_sweep_table_delay5ms_raw.csv --systems table \
+    --title "chunk_table（全リンク片道 5 ms）" --out results/png/chunk_sweep_table_delay5ms.png
 python3 plot_chunk_sweep.py results/csv/chunk_sweep_pull_raw.csv \
     --systems pull --out results/png/chunk_sweep_pull.png
 ```
